@@ -17,13 +17,18 @@ def login():
     cursor = conn.cursor()
 
     try:
-        cursor.execute('SELECT * FROM users WHERE username = %s', (username,))
+        cursor.execute('SELECT * FROM NPC WHERE username = %s', (username,))
         user = cursor.fetchone()
 
         if user and check_password(user['password'], password):
-            session['user_id'] = user['id'] 
-            return jsonify({'message': 'Logged in Successfully'}), 200
-        return jsonify({'error': 'Invalid credentials'}), 401
+            session["user"] = {
+                'name': user['name'],
+                'username': user['username'],
+
+            }
+        redirect_url = "/dashboard"
+        return jsonify({'message': 'Logged in Successfully', 'redirect': redirect_url}), 200
+
     except:
         return jsonify({'error': 'Login failed'}), 500
     finally:
@@ -47,7 +52,7 @@ def register():
 
     try:
         cursor.execute(
-            'INSERT INTO users (name, username, password) VALUES (%s, %s, %s)',
+            'INSERT INTO NPC (name, username, password) VALUES (%s, %s, %s)',
             (name, username, hashed_password)
         )
         conn.commit()
@@ -57,3 +62,15 @@ def register():
     finally:
         cursor.close()
         conn.close()
+
+@auth_bp.route('/user')
+def user():
+    if "user" in session:
+        return jsonify({'user': session["user"], 'logged_in': True}), 200
+    return jsonify({'user': None, 'logged_in': False}), 200
+
+@auth_bp.route('/dashboard')
+def dashboard():
+    if "user" not in session:
+        return jsonify({'message': 'Session expired', 'redirect': '/login'}), 403
+    return jsonify({'message': 'Welcome to the Dashboard', 'user': session['user']}), 200
