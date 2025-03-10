@@ -4,11 +4,18 @@ from utils.hash_util import hash_password, check_password
 import re
 
 auth_bp = Blueprint('auth', __name__)
+#
+# 
+# password validation
 PASSWORD_REGEX = r"^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*\W).{8,}$"
 
 def validatePassword(password):
     return re.match(PASSWORD_REGEX, password)
 
+
+#
+#
+# login
 @auth_bp.route('/login', methods=['POST'])
 def login():
     data = request.get_json()
@@ -38,7 +45,9 @@ def login():
         cursor.close()
         conn.close()
 
-
+#
+#
+# register
 @auth_bp.route('/register', methods=['POST'])
 def register():
     data = request.get_json()
@@ -73,6 +82,10 @@ def register():
         cursor.close()
         conn.close()
 
+
+#
+#
+# check user if in session
 @auth_bp.route('/user')
 def user():
     if "user" in session:
@@ -85,6 +98,9 @@ def dashboard():
         return jsonify({'message': 'Session expired', 'redirect': '/login'}), 403
     return jsonify({'message': 'Welcome to the Dashboard', 'user': session['user']}), 200
 
+#
+#
+# logout
 @auth_bp.route('/logout', methods=['POST'])
 def logout():
     session.clear()
