@@ -5,7 +5,6 @@ from config import Config
 from controllers.auth_controller import auth_bp
 from utils.hash_util import bcrypt
 
-
 app = Flask(__name__)
 app.config.from_object(Config)
 
