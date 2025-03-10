@@ -1,5 +1,5 @@
 import { HashRouter as Router, Routes, Route } from "react-router-dom";
-import Login from "./components/auth/login";
+import LoginBody from "./components/body/body";
 import Register from "./components/auth/register";
 import Dashboard from "./components/dashboard/dashboard";
 
@@ -8,7 +8,7 @@ function App() {
     <>
       <Router>
         <Routes>
-          <Route path="/login" element={<Login />} />
+          <Route path="/" element={<LoginBody />} />
           <Route path="/register" element={<Register />} />
           <Route path="/dashboard" element={<Dashboard />} />
         </Routes>

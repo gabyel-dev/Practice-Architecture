@@ -1,0 +1,19 @@
+@font-face {
+  font-family: "Klavika";
+  src: url("/assets/fonts/Klavika-bold.otf") format("opentype");
+}
+@font-face {
+  font-family: "SF Pro Display";
+  src: url("/fonts/SFProDisplay-Regular.otf") format("opentype");
+}
+
+@import url("https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&display=swap");
+
+.Mont {
+  font-family: "Montserrat", sans-serif;
+}
+
+body {
+  font-family: "SF Pro Display", Helvetica, Arial, sans-serif;
+  background-color: #f2f5f6;
+}

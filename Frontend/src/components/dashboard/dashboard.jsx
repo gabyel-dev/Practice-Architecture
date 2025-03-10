@@ -12,7 +12,7 @@ export default function Dashboard() {
       .then((res) => res.data)
       .then((data) => {
         if (!data.logged_in) {
-          navigate("/login");
+          navigate("/");
         }
       });
   }, [navigate]);
@@ -24,7 +24,7 @@ export default function Dashboard() {
         {},
         { withCredentials: true }
       );
-      navigate("/login"); // Redirect to login after logout
+      navigate("/"); // Redirect to login after logout
     } catch (error) {
       console.error("Logout failed:", error);
     }

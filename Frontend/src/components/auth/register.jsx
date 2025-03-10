@@ -36,6 +36,7 @@ export default function Register() {
    * Checks if the user is already logged in and redirects to the dashboard if so.
    */
   useEffect(() => {
+    document.title = "!Facebook - Register";
     axios
       .get("http://localhost:5000/user", { withCredentials: true })
       .then((res) => res.data)
@@ -151,7 +152,9 @@ export default function Register() {
 
       {/* Link to Login Page */}
       <p>
-        <Link to={"/login"}>Back to login</Link>
+        <Link to={"/"} className="text-blue-500 hover:underline">
+          Back to login
+        </Link>
       </p>
     </div>
   );

@@ -5,9 +5,9 @@ import re
 
 auth_bp = Blueprint('auth', __name__)
 
-# ==============================
+# =================================
 # Password Validation Configuration
-# ==============================
+# =================================
 PASSWORD_REGEX = r"^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*\W).{8,}$"
 
 def validatePassword(password):
@@ -100,7 +100,7 @@ def dashboard():
     return jsonify({'message': 'Welcome to the Dashboard', 'user': session['user']}), 200
 
 # ==============================
-# User Logout
+# Logout function
 # ==============================
 @auth_bp.route('/logout', methods=['POST'])
 def logout():
