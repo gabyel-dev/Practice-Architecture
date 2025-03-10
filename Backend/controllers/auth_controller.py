@@ -19,21 +19,18 @@ def validatePassword(password):
 @auth_bp.route('/login', methods=['POST'])
 def login():
     data = request.get_json()
-    username = data.get('username')
+    email = data.get('email')
     password = data.get('password')
 
     conn = get_db_connection()
-    if not conn:
-        return jsonify({'error': 'Database connection failed'}), 500
-
     cursor = conn.cursor()
 
     try:
-        cursor.execute('SELECT * FROM NPC WHERE username = %s', (username,))
+        cursor.execute('SELECT * FROM NPC WHERE email = %s', (email,))
         user = cursor.fetchone()
 
-        if user and check_password(user['password'], password):
-            session["user"] = {"username": username, "id": user['id']} 
+        if user and check_password(user["password"], password):
+            session["user"] = {"email": email, "id": user['id']} 
             return jsonify({'message': 'Login successful', 'redirect': "/dashboard"}), 200
         else:
             return jsonify({'error': 'Invalid username or password', 'redirect': '/login'}), 401
@@ -50,8 +47,12 @@ def login():
 @auth_bp.route('/register', methods=['POST'])
 def register():
     data = request.get_json()
-    name = data.get('name')
-    username = data.get('username')
+    fname = data.get('first_name')
+    lname = data.get('last_name')
+    b_day = data.get('Birthday_day')
+    b_month = data.get('Birthday_month')
+    b_year = data.get('Birthday_year')
+    email = data.get('email')
     password = data.get('password')
 
     hashed_password = hash_password(password)
@@ -61,17 +62,14 @@ def register():
         return jsonify({'error': 'Database connection failed'}), 500
 
     cursor = conn.cursor()
-    
-    if not name or not username or not password:
-        return jsonify({"error": "All fields are required"}), 400
 
     if not validatePassword(password):
         return jsonify({"error": "Password must be at least 8 characters long, include an uppercase letter, a lowercase letter, and a number or special character."}), 400
 
     try:
         cursor.execute(
-            'INSERT INTO NPC (name, username, password) VALUES (%s, %s, %s)',
-            (name, username, hashed_password)
+            'INSERT INTO NPC (first_name, last_name, email, password, b_month, b_day, b_year) VALUES (%s, %s, %s, %s, %s, %s, %s)',
+            (fname, lname, email, hashed_password, b_month, b_day, b_year, )
         )
         conn.commit()
         return jsonify({'message': 'Registration successful'}), 200

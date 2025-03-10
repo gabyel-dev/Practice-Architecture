@@ -14,7 +14,3 @@ def get_db_connection():
         print('Database Connection Failed')
         return None
     
-# ==============================
-# Debug
-# ==============================
-get_db_connection()
