@@ -13,9 +13,9 @@ def validatePassword(password):
     return re.match(PASSWORD_REGEX, password)
 
 
-#
-#
+#==========
 # login
+#==========
 @auth_bp.route('/login', methods=['POST'])
 def login():
     data = request.get_json()
