@@ -70,7 +70,7 @@ export default function ForgotHeader() {
               setLoginData({ ...loginData, email: e.target.value })
             }
             required
-            className="w-full h-10 text-sm border-gray-200 border-2 rounded-md p-3 focus:outline-[#0866ff]"
+            className="w-full h-10 text-sm border-gray-200 border-2 rounded-md p-3 focus:outline-1 focus:outline-[#0866ff]"
           />
 
           <input
@@ -81,7 +81,7 @@ export default function ForgotHeader() {
               setLoginData({ ...loginData, password: e.target.value })
             }
             required
-            className={`w-full h-10 text-sm border-2 rounded-md p-3 focus:outline-[#0866ff] ${
+            className={`w-full h-10 text-sm border-2 rounded-md p-3 focus:outline-1 focus:outline-[#0866ff]  ${
               error ? "border-red-500" : "border-gray-200"
             }`}
           />

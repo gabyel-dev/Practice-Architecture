@@ -86,7 +86,7 @@ export default function ForgotPassword() {
               setLoginData({ ...loginData, email: e.target.value })
             }
             required
-            className="w-[100%] h-13 text-md border-gray-200 border-2 rounded-md p-3 focus:outline-[#0866ff]"
+            className="w-[100%] h-13 text-md border-gray-200 border-2 rounded-md p-3 focus:outline-1 focus:outline-[#0866ff]"
           />
 
           <input
@@ -97,7 +97,7 @@ export default function ForgotPassword() {
               setLoginData({ ...loginData, password: e.target.value })
             }
             required
-            className="w-full h-13 text-md border-gray-200 border-2 rounded-md p-3 focus:outline-[#0866ff]"
+            className="w-full h-13 text-md border-gray-200 border-2 rounded-md p-3 focus:outline-1 focus:outline-[#0866ff]"
           />
 
           <input
@@ -110,7 +110,7 @@ export default function ForgotPassword() {
               setError(validatePass === true ? "" : validatePass.join("\n"));
             }}
             required
-            className="w-full h-13 text-md border-gray-200 border-2 rounded-md p-3 focus:outline-[#0866ff]"
+            className="w-full h-13 text-md border-gray-200 border-2 rounded-md p-3 focus:outline-1 focus:outline-[#0866ff]"
           />
 
           {errorMsg && (
