@@ -7,7 +7,7 @@ export default function Login() {
   const navigate = useNavigate();
   const [errorMsg, setErrorMessage] = useState("");
   const [loading, setLoading] = useState(false);
-  const [loginData, setLoginData] = useState({ email: "", password: "" });
+  const [loginData, setLoginData] = useState({ email: "" });
   const passwordRef = useRef(null); // Use ref instead of state for passwords
 
   useEffect(() => {
@@ -61,10 +61,10 @@ export default function Login() {
           Connect with friends and the world around you on Facebook.
         </p>
       </div>
-      <div className="right-hero w-[50%] flex items-center justify-center">
+      <div className="right-hero w-[50%] flex justify-center">
         <form
           onSubmit={handleLogin}
-          className="flex flex-col gap-y-3 items-center bg-white p-4 rounded-[10px] shadow-md max-w-[380px] min-w-[395px]"
+          className="flex flex-col gap-y-3 items-center bg-white p-4 rounded-[10px] shadow-md max-w-[380px] min-w-[395px] h-[fit-content]"
         >
           <input
             type="text"

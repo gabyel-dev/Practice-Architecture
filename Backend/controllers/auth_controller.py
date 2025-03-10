@@ -78,6 +78,35 @@ def register():
     finally:
         cursor.close()
         conn.close()
+        
+# ==============================
+# Forgot Password
+# ==============================
+@auth_bp.route('/forgot_password', methods=['POST'])
+def forgot_password():
+    data = request.get_json()
+    print(data)
+    email = data.get('email')
+    password = data.get('password')
+    newPassword = data.get('newPassword')
+    
+    conn = get_db_connection()
+    cursor = conn.cursor()
+    
+    try:
+        cursor.execute('SELECT * FROM NPC WHERE email = %s', (email,))
+        user = cursor.fetchone()
+        
+        
+        if user and check_password(user['password'], password):
+            hashed_password = hash_password(newPassword)
+            cursor.execute('UPDATE NPC SET password = %s WHERE email = %s', (hashed_password, email,))
+            conn.commit()
+            
+            return jsonify({'message': 'password successfully changed'})
+    except:
+        return jsonify({'message': 'password change failed'})
+        
 
 # ==============================
 # User Session Check
