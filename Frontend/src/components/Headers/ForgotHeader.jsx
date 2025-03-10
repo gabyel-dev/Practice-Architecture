@@ -31,7 +31,7 @@ export default function ForgotHeader() {
     setError(false);
     setErrorMessage("");
     setShowError(false);
-    setFadeOut(false); // Reset fade effect
+    setFadeOut(false);
 
     try {
       await axios.post("http://localhost:5000/login", loginData, {
@@ -45,7 +45,7 @@ export default function ForgotHeader() {
       if (error.response?.status === 401 || error.response?.status === 400) {
         setShowError(true);
         setTimeout(() => setFadeOut(true), 2000);
-        setTimeout(() => setShowError(false), 2000);
+        setTimeout(() => setShowError(false), 3000);
         setLoginData((prev) => ({ ...prev, password: "" }));
       } else {
         setError(true);
