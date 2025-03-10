@@ -1,8 +1,13 @@
 from flask import Blueprint, request, jsonify, session
 from models.database import get_db_connection
 from utils.hash_util import hash_password, check_password
+import re
 
 auth_bp = Blueprint('auth', __name__)
+PASSWORD_REGEX = r"^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*\W).{8,}$"
+
+def validatePassword(password):
+    return re.match(PASSWORD_REGEX, password)
 
 @auth_bp.route('/login', methods=['POST'])
 def login():
@@ -21,19 +26,18 @@ def login():
         user = cursor.fetchone()
 
         if user and check_password(user['password'], password):
-            session["user"] = {
-                'name': user['name'],
-                'username': user['username'],
+            session["user"] = {"username": username} 
+            session["user"] = {"id": user['id']}
+            return jsonify({'message': 'Logged in Successfully', 'redirect': "/dashboard"}), 200
+        else:
+            return jsonify({'error': 'Invalid username or password', 'redirect': '/login'}), 401
 
-            }
-        redirect_url = "/dashboard"
-        return jsonify({'message': 'Logged in Successfully', 'redirect': redirect_url}), 200
-
-    except:
-        return jsonify({'error': 'Login failed'}), 500
+    except Exception as e:
+        return jsonify({'error': f'Login failed: {str(e)}'}), 500
     finally:
         cursor.close()
         conn.close()
+
 
 @auth_bp.route('/register', methods=['POST'])
 def register():
@@ -49,6 +53,12 @@ def register():
         return jsonify({'error': 'Database connection failed'}), 500
 
     cursor = conn.cursor()
+    
+    if not name or not username or not password:
+        return jsonify({"error": "All fields are required"}), 400
+
+    if not validatePassword(password):
+        return jsonify({"error": "Password must be at least 8 characters long, include an uppercase letter, a lowercase letter, and a number or special character."}), 400
 
     try:
         cursor.execute(
@@ -66,11 +76,16 @@ def register():
 @auth_bp.route('/user')
 def user():
     if "user" in session:
-        return jsonify({'user': session["user"], 'logged_in': True}), 200
-    return jsonify({'user': None, 'logged_in': False}), 200
+        return jsonify({'user': session["user"], 'logged_in': True, 'redirect': '/dashboard'}), 200
+    return jsonify({'user': None, 'logged_in': False, 'redirect': '/login'}), 200
 
 @auth_bp.route('/dashboard')
 def dashboard():
     if "user" not in session:
         return jsonify({'message': 'Session expired', 'redirect': '/login'}), 403
     return jsonify({'message': 'Welcome to the Dashboard', 'user': session['user']}), 200
+
+@auth_bp.route('/logout', methods=['POST'])
+def logout():
+    session.clear()
+    return jsonify({'message': 'logout successful', 'redirect': '/login'})
