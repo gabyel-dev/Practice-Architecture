@@ -13,6 +13,43 @@ PASSWORD_REGEX = r"^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*\W).{8,}$"
 def validatePassword(password):
     return re.match(PASSWORD_REGEX, password)
 
+# =================================
+# Birth Validation Configuration
+# =================================
+def isValidMonth(month):
+    fullMonths = ["January",
+      "February",
+      "March",
+      "April",
+      "May",
+      "June",
+      "July",
+      "August",
+      "September",
+      "October",
+      "November",
+      "December",]
+    
+    shortMonths = [
+      "Jan",
+      "Feb",
+      "Mar",
+      "Apr",
+      "May",
+      "Jun",
+      "Jul",
+      "Aug",
+      "Sep",
+      "Oct",
+      "Nov",
+      "Dec",
+    ]
+    
+    formatted_month = month.strip().capitalize()
+    
+    return formatted_month in fullMonths or formatted_month in shortMonths
+    
+
 # ==============================
 # User Authentication - Login
 # ==============================
@@ -28,6 +65,9 @@ def login():
     try:
         cursor.execute('SELECT * FROM NPC WHERE email = %s', (email,))
         user = cursor.fetchone()
+        
+        if not user:
+            return jsonify({'message': 'There is no such user'}), 404
 
         if user and check_password(user["password"], password):
             session["user"] = {"email": email, "id": user['id']} 
@@ -72,7 +112,14 @@ def register():
             (fname, lname, email, hashed_password, b_month, b_day, b_year, )
         )
         conn.commit()
-        return jsonify({'message': 'Registration successful'}), 200
+        
+        b_day = int(b_day)
+        b_year = int(b_year)
+        
+        if (isValidMonth(b_month) == True and 1 <= b_day <= 31 and 1900 <= b_year <= 2025):
+            return jsonify({'message': 'Registration successful'}), 200
+        else:
+            return jsonify({'error': 'Registration failed'}), 400
     except:
         return jsonify({'error': 'Registration failed'}), 500
     finally:

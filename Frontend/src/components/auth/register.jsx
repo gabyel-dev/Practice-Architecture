@@ -5,6 +5,8 @@ import axios from "axios";
 export default function Register() {
   const navigate = useNavigate();
   const [error, setError] = useState("");
+  const [birthError, setBirthError] = useState("");
+  const [birthErrorDay, setBirthErrorDay] = useState("");
   const [registerData, setRegisterData] = useState({
     first_name: "",
     last_name: "",
@@ -14,6 +16,51 @@ export default function Register() {
     email: "",
     password: "",
   });
+
+  const isValidMonth = (month) => {
+    const fullMonths = [
+      "January",
+      "February",
+      "March",
+      "April",
+      "May",
+      "June",
+      "July",
+      "August",
+      "September",
+      "October",
+      "November",
+      "December",
+    ];
+
+    const shortMonths = [
+      "Jan",
+      "Feb",
+      "Mar",
+      "Apr",
+      "May",
+      "Jun",
+      "Jul",
+      "Aug",
+      "Sep",
+      "Oct",
+      "Nov",
+      "Dec",
+    ];
+
+    const formattedMonth = month.trim().toLowerCase();
+
+    return (
+      fullMonths.some((m) => m.toLowerCase() === formattedMonth) ||
+      shortMonths.some((m) => m.toLowerCase() === formattedMonth)
+    );
+  };
+
+  const isValidDay = (day) => {
+    const validDay = Number(day);
+
+    return !isNaN(validDay) && validDay >= 1 && validDay <= 31;
+  };
 
   /**
    * Validates the provided password against common security requirements.
@@ -36,11 +83,36 @@ export default function Register() {
     return errors.length === 0 ? true : errors;
   }
 
+  function ValidateBirthmonth() {
+    const bmonth = registerData.Birthday_month;
+
+    const checkMonth = isValidMonth(bmonth);
+
+    if (checkMonth !== true) {
+      setBirthError("Invalid month");
+    } else {
+      setBirthError("");
+    }
+  }
+
+  function ValidateDay() {
+    const bday = registerData.Birthday_day;
+
+    const checkdays = isValidDay(bday);
+
+    if (checkdays === true) {
+      setBirthErrorDay("");
+    } else {
+      setBirthErrorDay("Invalid day");
+    }
+  }
+
   /**
    * Checks if the user is already logged in and redirects to the dashboard if so.
    */
   useEffect(() => {
     document.title = "!Facebook - Register";
+    ValidateBirthmonth();
     axios
       .get("http://localhost:5000/user", { withCredentials: true })
       .then((res) => res.data)
@@ -51,12 +123,21 @@ export default function Register() {
       });
   }, [navigate]);
 
+  useEffect(() => {
+    ValidateBirthmonth();
+  }, [registerData.Birthday_month]);
+
+  useEffect(() => {
+    ValidateDay();
+  }, [registerData.Birthday_day]);
+
   /**
    * Handles the registration form submission.
    * Validates the password and sends user data to the backend.
    * @param {Event} e - The form submit event.
    */
   const handleRegister = async (e) => {
+    setBirthError("");
     e.preventDefault();
 
     const passwordValidation = validatePassword(registerData.password);
@@ -121,45 +202,66 @@ export default function Register() {
           <div className="flex flex-col">
             <p className="text-left text-[0.7em] text-gray-500">Birthday</p>
             <div className="flex gap-2.5">
-              <input
-                type="text"
-                value={registerData.Birthday_month}
-                onChange={(e) =>
-                  setRegisterData({
-                    ...registerData,
-                    Birthday_month: e.target.value,
-                  })
-                }
-                placeholder="Month"
-                required
-                className="w-[32%] h-10 text-sm border-gray-200 border-2 rounded-md p-3 focus:outline focus:outline-1 focus:outline-[#0866ff] placeholder-gray-400"
-              />
-              <input
-                type="text"
-                value={registerData.Birthday_day}
-                onChange={(e) =>
-                  setRegisterData({
-                    ...registerData,
-                    Birthday_day: e.target.value,
-                  })
-                }
-                placeholder="Day"
-                required
-                className="w-[32%] h-10 text-sm border-gray-200 border-2 rounded-md p-3 focus:outline focus:outline-1 focus:outline-[#0866ff] placeholder-gray-400"
-              />
-              <input
-                type="text"
-                value={registerData.Birthday_year}
-                onChange={(e) =>
-                  setRegisterData({
-                    ...registerData,
-                    Birthday_year: e.target.value,
-                  })
-                }
-                placeholder="Year"
-                required
-                className="w-[32%] h-10 text-md border-gray-200 border-2 rounded-md p-3 focus:outline focus:outline-1 focus:outline-[#0866ff] placeholder-gray-400"
-              />
+              <div className="flex flex-col w-[fit-content]">
+                <input
+                  type="text"
+                  value={registerData.Birthday_month}
+                  onChange={(e) =>
+                    setRegisterData({
+                      ...registerData,
+                      Birthday_month: e.target.value,
+                    })
+                  }
+                  placeholder="Month"
+                  required
+                  className="w-[100%] h-10 text-sm border-gray-200 border-2 rounded-md p-3 focus:outline focus:outline-1 focus:outline-[#0866ff] placeholder-gray-400"
+                />
+                {birthError && (
+                  <div className="">
+                    <p className="text-[0.7em] text-red-500">{birthError}</p>
+                  </div>
+                )}
+              </div>
+              <div className="">
+                <input
+                  type="text"
+                  value={registerData.Birthday_day}
+                  onChange={(e) =>
+                    setRegisterData({
+                      ...registerData,
+                      Birthday_day: e.target.value,
+                    })
+                  }
+                  placeholder="Day"
+                  required
+                  className="w-[100%] h-10 text-sm border-gray-200 border-2 rounded-md p-3 focus:outline focus:outline-1 focus:outline-[#0866ff] placeholder-gray-400"
+                />
+                {birthErrorDay && (
+                  <div className="">
+                    <p className="text-[0.7em] text-red-500">{birthErrorDay}</p>
+                  </div>
+                )}
+              </div>
+              <div>
+                <input
+                  type="text"
+                  value={registerData.Birthday_year}
+                  onChange={(e) =>
+                    setRegisterData({
+                      ...registerData,
+                      Birthday_year: e.target.value,
+                    })
+                  }
+                  placeholder="Year"
+                  required
+                  className="w-[100%] h-10 text-md border-gray-200 border-2 rounded-md p-3 focus:outline focus:outline-1 focus:outline-[#0866ff] placeholder-gray-400"
+                />
+                {birthError && (
+                  <div className="">
+                    <p className="text-[0.7em] text-red-500">{birthError}</p>
+                  </div>
+                )}
+              </div>
             </div>
           </div>
 
