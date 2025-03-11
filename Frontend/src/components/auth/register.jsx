@@ -7,6 +7,7 @@ export default function Register() {
   const [error, setError] = useState("");
   const [birthError, setBirthError] = useState("");
   const [birthErrorDay, setBirthErrorDay] = useState("");
+  const [birthErrorYear, setBirthErrorYear] = useState("");
   const [registerData, setRegisterData] = useState({
     first_name: "",
     last_name: "",
@@ -62,6 +63,12 @@ export default function Register() {
     return !isNaN(validDay) && validDay >= 1 && validDay <= 31;
   };
 
+  const isValidYear = (year) => {
+    const validYear = Number(year);
+
+    return !isNaN(validYear) && validYear >= 1900 && validYear <= 2025;
+  };
+
   /**
    * Validates the provided password against common security requirements.
    * @param {string} password - The password to validate.
@@ -107,12 +114,26 @@ export default function Register() {
     }
   }
 
+  function validateYear() {
+    const byear = registerData.Birthday_year;
+
+    const checkYear = isValidYear(byear);
+
+    if (checkYear === true) {
+      setBirthErrorYear("");
+    } else {
+      setBirthErrorYear("Invalid Year");
+    }
+  }
+
   /**
    * Checks if the user is already logged in and redirects to the dashboard if so.
    */
   useEffect(() => {
     document.title = "!Facebook - Register";
     ValidateBirthmonth();
+    validateYear();
+    ValidateDay();
     axios
       .get("http://localhost:5000/user", { withCredentials: true })
       .then((res) => res.data)
@@ -130,6 +151,10 @@ export default function Register() {
   useEffect(() => {
     ValidateDay();
   }, [registerData.Birthday_day]);
+
+  useEffect(() => {
+    validateYear();
+  }, [registerData.Birthday_year]);
 
   /**
    * Handles the registration form submission.
@@ -254,11 +279,13 @@ export default function Register() {
                   }
                   placeholder="Year"
                   required
-                  className="w-[100%] h-10 text-md border-gray-200 border-2 rounded-md p-3 focus:outline focus:outline-1 focus:outline-[#0866ff] placeholder-gray-400"
+                  className="w-[100%] h-10 text-sm border-gray-200 border-2 rounded-md p-3 focus:outline focus:outline-1 focus:outline-[#0866ff] placeholder-gray-400"
                 />
-                {birthError && (
+                {birthErrorYear && (
                   <div className="">
-                    <p className="text-[0.7em] text-red-500">{birthError}</p>
+                    <p className="text-[0.7em] text-red-500">
+                      {birthErrorYear}
+                    </p>
                   </div>
                 )}
               </div>

@@ -106,7 +106,7 @@ export default function Login() {
           <button
             type="submit"
             disabled={loading}
-            className={`w-full bg-[#0866ff] rounded-[5px] text-white pt-2 pb-2 font-bold text-[1.3em] ${
+            className={`w-full bg-[#0866ff] rounded-[5px] text-white pt-2 pb-2 font-bold text-[1.3em] cursor-pointer ${
               loading ? "opacity-50 cursor-not-allowed" : "hover:bg-blue-600"
             }`}
           >
@@ -117,10 +117,12 @@ export default function Login() {
             Forgot password?
           </Link>
           <hr className="border-t-1 border-gray-300 w-full mt-2 mb-3" />
-
-          <button className="w-[55%] bg-[#42b72a] rounded-[5px] text-white pt-2.5 pb-2.5 font-bold text-[1.06em] hover:bg-green-600">
-            <Link to="/register">Create new account</Link>
-          </button>
+          <Link
+            to="/register"
+            className="w-[55%] bg-[#42b72a] rounded-[5px] text-white pt-2.5 pb-2.5 font-bold text-[1.06em] hover:bg-green-600 cursor-pointer text-center"
+          >
+            Create new account
+          </Link>
         </form>
       </div>
     </div>
