@@ -2,6 +2,7 @@ import axios from "axios";
 import { useState, useEffect, useRef } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import "./css/base.css";
+import "./css/mobileLogin.css";
 
 export default function Login() {
   const navigate = useNavigate();
@@ -54,19 +55,20 @@ export default function Login() {
   };
 
   return (
-    <div className="flex flex-row w-full h-[60vh] justify-center bg-[#f2f4f7]">
+    <div className="login-parent flex flex-row w-full h-[60vh] justify-center bg-[#f2f4f7]">
       <div className="left-hero w-[50%] pr-10">
-        <h1 className="text-[#0866ff] font-[700] Mont lg:text-[4em] pt-12">
+        <img src="_fb_logo.png" alt="logo" />
+        <h1 className="fb_logo text-[#0866ff] font-[700] Mont lg:text-[4em] pt-12">
           !facebook
         </h1>
-        <p className="text-[1.7em]">
+        <p className="desc text-[1.7em]">
           Connect with friends and the world around you on Facebook.
         </p>
       </div>
       <div className="right-hero w-[50%] flex justify-center">
         <form
           onSubmit={handleLogin}
-          className="flex flex-col gap-y-3 items-center bg-white p-4 rounded-[10px] shadow-md max-w-[380px] min-w-[395px] h-[fit-content]"
+          className="login-form flex flex-col gap-y-3 items-center bg-white p-4 rounded-[10px] shadow-md max-w-[380px] min-w-[395px] h-[fit-content]"
         >
           <input
             type="text"
@@ -106,20 +108,23 @@ export default function Login() {
           <button
             type="submit"
             disabled={loading}
-            className={`w-full bg-[#0866ff] rounded-[5px] text-white pt-2 pb-2 font-bold text-[1.3em] cursor-pointer ${
+            className={`login-btn w-full bg-[#0866ff] rounded-[5px] text-white pt-2 pb-2 font-bold text-[1.3em] cursor-pointer ${
               loading ? "opacity-50 cursor-not-allowed" : "hover:bg-blue-600"
             }`}
           >
             {loading ? "Logging in..." : "Log In"}
           </button>
 
-          <Link to="/forgot_password" className="text-[#0866ff] text-[0.9em]">
+          <Link
+            to="/forgot_password"
+            className="forgot-btn text-[#0866ff] text-[0.9em]"
+          >
             Forgot password?
           </Link>
           <hr className="border-t-1 border-gray-300 w-full mt-2 mb-3" />
           <Link
             to="/register"
-            className="w-[55%] bg-[#42b72a] rounded-[5px] text-white pt-2.5 pb-2.5 font-bold text-[1.06em] hover:bg-green-600 cursor-pointer text-center"
+            className="create-account w-[55%] bg-[#42b72a] rounded-[5px] text-white pt-2.5 pb-2.5 font-bold text-[1.06em] hover:bg-green-600 cursor-pointer text-center"
           >
             Create new account
           </Link>
