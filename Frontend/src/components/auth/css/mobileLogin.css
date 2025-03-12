@@ -1,0 +1,73 @@
+@media (min-width: 1024px) {
+  .left-hero img {
+    display: none;
+  }
+}
+
+@media (max-width: 550px) {
+  .login-parent {
+    display: flex;
+    flex-direction: column;
+  }
+  .desc {
+    display: None;
+  }
+  .fb_logo {
+    display: none;
+  }
+
+  hr {
+    display: none;
+  }
+
+  .login-form {
+    background-color: #f2f4f7;
+    box-shadow: none;
+  }
+
+  .login-form .login-btn {
+    border-radius: 50px;
+    background-color: #1332e6;
+  }
+
+  .login-form input {
+    border-radius: 15px;
+  }
+
+  .login-form .create-account {
+    width: 100%;
+    border-radius: 50px;
+    background-color: #f2f4f7;
+    color: #1332e6;
+    border: 1px solid #1332e6;
+    position: relative;
+    bottom: -170px;
+  }
+
+  .forgot-btn {
+    color: #2a2d30;
+    padding-top: 10px;
+    font-weight: bold;
+  }
+
+  .left-hero {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    padding: 0;
+  }
+
+  .left-hero img {
+    width: 70px;
+    height: 70px;
+    margin-bottom: 100px;
+  }
+
+  .right-hero {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+  }
+}
