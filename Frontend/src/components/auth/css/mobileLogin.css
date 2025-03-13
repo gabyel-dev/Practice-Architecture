@@ -2,6 +2,10 @@
   .left-hero img {
     display: none;
   }
+
+  .create-account-mobile {
+    display: none;
+  }
 }
 
 @media (max-width: 550px) {
@@ -9,6 +13,11 @@
     display: flex;
     flex-direction: column;
   }
+
+  .create-account-pc {
+    display: none;
+  }
+
   .desc {
     display: None;
   }
@@ -34,14 +43,14 @@
     border-radius: 15px;
   }
 
-  .login-form .create-account {
+  .login-form .create-account-mobile {
     width: 100%;
     border-radius: 50px;
     background-color: #f2f4f7;
     color: #1332e6;
     border: 1px solid #1332e6;
     position: relative;
-    bottom: -170px;
+    bottom: -150px;
   }
 
   .forgot-btn {

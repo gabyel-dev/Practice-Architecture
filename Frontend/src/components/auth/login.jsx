@@ -124,7 +124,13 @@ export default function Login() {
           <hr className="border-t-1 border-gray-300 w-full mt-2 mb-3" />
           <Link
             to="/register"
-            className="create-account w-[55%] bg-[#42b72a] rounded-[5px] text-white pt-2.5 pb-2.5 font-bold text-[1.06em] hover:bg-green-600 cursor-pointer text-center"
+            className="create-account-pc w-[55%] bg-[#42b72a] rounded-[5px] text-white pt-2.5 pb-2.5 font-bold text-[1.06em] hover:bg-green-600 cursor-pointer text-center"
+          >
+            Create new account
+          </Link>
+          <Link
+            to="/register/name"
+            className="create-account-mobile w-[55%] bg-[#42b72a] rounded-[5px] text-white pt-2.5 pb-2.5 font-bold text-[1.06em] hover:bg-green-600 cursor-pointer text-center"
           >
             Create new account
           </Link>
