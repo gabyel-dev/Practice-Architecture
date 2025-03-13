@@ -156,7 +156,7 @@ export default function Register() {
             <p className="text-left text-xs text-gray-500">Birthday</p>
             <div className="flex gap-2">
               <select
-                className="w-1/3 h-10 border-gray-300 border rounded-md p-2 focus:ring-1 focus:ring-blue-500"
+                className="w-1/3 h-10 border-gray-300 border rounded-md p-2 focus:ring-1 focus:ring-blue-500 text-sm"
                 value={selectedMonth}
                 onChange={(e) =>
                   handleBirthdayChange(
@@ -166,7 +166,6 @@ export default function Register() {
                   )
                 }
               >
-                <option value="">Month</option>
                 {months.map((month) => (
                   <option key={month} value={month}>
                     {month}
@@ -175,7 +174,7 @@ export default function Register() {
               </select>
 
               <select
-                className="w-1/3 h-10 border-gray-300 border rounded-md p-2 focus:ring-1 focus:ring-blue-500"
+                className="w-1/3 h-10 border-gray-300 border rounded-md p-2 focus:ring-1 focus:ring-blue-500 text-sm"
                 value={selectedDay}
                 onChange={(e) =>
                   handleBirthdayChange(
@@ -185,7 +184,6 @@ export default function Register() {
                   )
                 }
               >
-                <option value="">Day</option>
                 {days.map((day) => (
                   <option key={day} value={day}>
                     {day}
@@ -194,7 +192,7 @@ export default function Register() {
               </select>
 
               <select
-                className="w-1/3 h-10 border-gray-300 border rounded-md p-2 focus:ring-1 focus:ring-blue-500"
+                className="w-1/3 h-10 border-gray-300 border rounded-md p-2 focus:ring-1 focus:ring-blue-500 text-sm"
                 value={selectedYear}
                 onChange={(e) =>
                   handleBirthdayChange(
@@ -204,7 +202,6 @@ export default function Register() {
                   )
                 }
               >
-                <option value="">Year</option>
                 {years.map((year) => (
                   <option key={year} value={year}>
                     {year}
@@ -240,7 +237,7 @@ export default function Register() {
 
           <button
             type="submit"
-            className="w-1/2 bg-green-500 text-white py-2 rounded-md font-bold hover:bg-green-600"
+            className="w-1/2 bg-green-500 text-white py-2 rounded-md font-bold hover:bg-green-600 cursor-pointer"
           >
             Sign Up
           </button>

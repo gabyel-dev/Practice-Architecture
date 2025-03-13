@@ -61,7 +61,7 @@ export default function RegMobileBirthday() {
 
   return (
     <>
-      <Link to={"/"}>{back}</Link>
+      <Link to={"/register/name"}>{back}</Link>
       <div className="p-5 flex flex-col gap-2">
         <h1 className="text-3xl font-bold">When's your birthday?</h1>
         <p className="pb-3 text-[1.2em]">
@@ -74,9 +74,8 @@ export default function RegMobileBirthday() {
             value={birthday.month}
             onChange={handleChange}
             required
-            className="border-1 p-3 w-1/3 rounded-2xl text-lg focus:outline-1 focus:outline-blue-500"
+            className="border-1 p-3 w-1/3 rounded-2xl text-lg focus:outline-1 focus:outline-blue-500 text-md"
           >
-            <option value="">Month</option>
             {months.map((month, index) => (
               <option key={index} value={month}>
                 {month}
@@ -89,9 +88,8 @@ export default function RegMobileBirthday() {
             value={birthday.day}
             onChange={handleChange}
             required
-            className="border-1 p-3 w-1/3 rounded-2xl text-lg focus:outline-1 focus:outline-blue-500"
+            className="border-1 p-3 w-1/3 rounded-2xl text-lg focus:outline-1 focus:outline-blue-500 text-md"
           >
-            <option value="">Day</option>
             {days.map((day) => (
               <option key={day} value={day}>
                 {day}
@@ -104,9 +102,8 @@ export default function RegMobileBirthday() {
             value={birthday.year}
             onChange={handleChange}
             required
-            className="border-1 p-3 w-1/3 rounded-2xl text-lg focus:outline-1 focus:outline-blue-500"
+            className="text-md border-1 p-3 w-1/3 rounded-2xl text-lg focus:outline-1 focus:outline-blue-500"
           >
-            <option value="">Year</option>
             {years.map((year) => (
               <option key={year} value={year}>
                 {year}

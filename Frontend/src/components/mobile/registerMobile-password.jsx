@@ -52,7 +52,7 @@ export default function RegMobilePassword() {
 
   return (
     <>
-      <Link to={"/"}>{back}</Link>
+      <Link to={"/register/email"}>{back}</Link>
       <div className="p-5 flex flex-col gap-2">
         <h1 className="text-3xl font-bold">Create a password</h1>
         <p className="pb-3 text-[1.2em]">
