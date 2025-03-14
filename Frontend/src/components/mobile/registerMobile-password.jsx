@@ -25,7 +25,7 @@ export default function RegMobilePassword() {
           navigate("/dashboard");
         }
       });
-  });
+  }, [navigate]);
 
   // Password Validation Function
   function validatePassword(password) {

@@ -24,7 +24,7 @@ export default function RegMobileEmail() {
           navigate("/dashboard");
         }
       });
-  });
+  }, [navigate]);
 
   const handleChange = (e) => {
     setFormData((prev) => ({ ...prev, email: e.target.value }));

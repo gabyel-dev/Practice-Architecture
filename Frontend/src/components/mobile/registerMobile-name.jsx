@@ -24,7 +24,7 @@ export default function RegMobileName() {
           navigate("/dashboard");
         }
       });
-  });
+  }, [navigate]);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -44,22 +44,53 @@ export default function RegMobileName() {
           Enter the name you use in real life.
         </p>
         <div className="flex gap-4 w-[100%]">
-          <input
-            type="text"
-            name="first_name"
-            placeholder="First Name"
-            value={formData.first_name}
-            onChange={handleChange}
-            className="border-1 p-3 w-[50%] rounded-2xl h-15 text-lg focus:outline-1 focus:outline-blue-500"
-          />
-          <input
-            type="text"
-            name="last_name"
-            placeholder="Last Name"
-            value={formData.last_name}
-            onChange={handleChange}
-            className="border-1 p-3 w-[50%] rounded-2xl h-15 text-lg focus:outline-1 focus:outline-blue-500"
-          />
+          {/* First Name */}
+          <div className="relative w-[50%]">
+            <input
+              type="text"
+              name="first_name"
+              id="first_name"
+              value={formData.first_name}
+              onChange={handleChange}
+              className="border border-gray-400 p-3 w-full rounded-2xl h-14 text-lg focus:outline-none focus:ring-2 focus:ring-blue-500 peer"
+            />
+            <label
+              htmlFor="first_name"
+              className={`absolute left-3 transition-all duration-200 text-lg text-gray-500 
+                ${
+                  formData.first_name
+                    ? "top-0 text-sm text-blue-500"
+                    : "top-7 -translate-y-1/2"
+                }
+              `}
+            >
+              First Name
+            </label>
+          </div>
+
+          {/* Last Name */}
+          <div className="relative w-[50%]">
+            <input
+              type="text"
+              name="last_name"
+              id="last_name"
+              value={formData.last_name}
+              onChange={handleChange}
+              className="border border-gray-400 p-3 w-full rounded-2xl h-14 text-lg focus:outline-none focus:ring-2 focus:ring-blue-500 peer"
+            />
+            <label
+              htmlFor="last_name"
+              className={`absolute left-3 transition-all duration-200 text-lg text-gray-500 
+                ${
+                  formData.last_name
+                    ? "top-0 text-sm text-blue-500"
+                    : "top-7 -translate-y-1/2"
+                }
+              `}
+            >
+              Last Name
+            </label>
+          </div>
         </div>
         <button
           onClick={handleNext}

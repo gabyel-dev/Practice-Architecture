@@ -24,7 +24,7 @@ export default function RegMobileBirthday() {
           navigate("/dashboard");
         }
       });
-  });
+  }, [navigate]);
 
   // State for month, day, and year
   const [birthday, setBirthday] = useState({
