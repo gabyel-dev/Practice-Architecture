@@ -1,6 +1,7 @@
 import { useNavigate, Link } from "react-router-dom";
 import { useForm } from "../FormContext";
-import { useState } from "react";
+import { useState, useEffect } from "react";
+import axios from "axios";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faArrowLeft } from "@fortawesome/free-solid-svg-icons";
 
@@ -11,6 +12,19 @@ const back = (
 export default function RegMobileBirthday() {
   const navigate = useNavigate();
   const { formData, setFormData } = useForm();
+
+  useEffect(() => {
+    axios
+      .get("http://localhost:5000/user", {
+        withCredentials: true,
+      })
+      .then((res) => res.data)
+      .then((data) => {
+        if (data.logged_in) {
+          navigate("/dashboard");
+        }
+      });
+  });
 
   // State for month, day, and year
   const [birthday, setBirthday] = useState({

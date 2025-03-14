@@ -2,6 +2,8 @@ import { useNavigate, Link } from "react-router-dom";
 import { useForm } from "../FormContext";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faArrowLeft } from "@fortawesome/free-solid-svg-icons";
+import { useEffect } from "react";
+import axios from "axios";
 
 const back = (
   <FontAwesomeIcon icon={faArrowLeft} className="text-2xl px-5 py-5" />
@@ -10,6 +12,19 @@ const back = (
 export default function RegMobileName() {
   const navigate = useNavigate();
   const { formData, setFormData } = useForm();
+
+  useEffect(() => {
+    axios
+      .get("http://localhost:5000/user", {
+        withCredentials: true,
+      })
+      .then((res) => res.data)
+      .then((data) => {
+        if (data.logged_in) {
+          navigate("/dashboard");
+        }
+      });
+  });
 
   const handleChange = (e) => {
     const { name, value } = e.target;
