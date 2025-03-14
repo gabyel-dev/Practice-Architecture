@@ -44,7 +44,7 @@ export default function RegMobilePassword() {
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(formData),
       });
-      navigate("/dashboard");
+      navigate("/");
     } catch (error) {
       console.error("Registration failed", error);
     }
