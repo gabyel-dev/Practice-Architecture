@@ -2,7 +2,7 @@ import { useNavigate, Link } from "react-router-dom";
 import { useForm } from "../FormContext";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faArrowLeft } from "@fortawesome/free-solid-svg-icons";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import axios from "axios";
 
 const back = (
@@ -12,6 +12,16 @@ const back = (
 export default function RegMobileName() {
   const navigate = useNavigate();
   const { formData, setFormData } = useForm();
+  const [windowSize, setWindowSize] = useState(window.innerWidth);
+
+  useEffect(() => {
+    const handleResize = () => {
+      setWindowSize(window.innerWidth);
+    };
+
+    window.addEventListener("resize", handleResize);
+    return () => window.removeEventListener("resize", handleResize);
+  }, []);
 
   useEffect(() => {
     axios
@@ -43,6 +53,9 @@ export default function RegMobileName() {
         <p className="pb-3 text-[1.2em]">
           Enter the name you use in real life.
         </p>
+
+        {windowSize < 550 ? "" : navigate("/register")}
+
         <div className="flex gap-4 w-[100%]">
           {/* First Name */}
           <div className="relative w-[50%]">
@@ -92,6 +105,7 @@ export default function RegMobileName() {
             </label>
           </div>
         </div>
+
         <button
           onClick={handleNext}
           className="bg-[#1333E7] mt-3 py-4 rounded-[50px] text-white text-lg"

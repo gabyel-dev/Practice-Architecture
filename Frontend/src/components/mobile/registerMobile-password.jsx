@@ -13,6 +13,15 @@ export default function RegMobilePassword() {
   const navigate = useNavigate();
   const { formData, setFormData } = useForm();
   const [error, setError] = useState("");
+  const [windowSize, setWindowSize] = useState(window.innerWidth);
+
+  useEffect(() => {
+    const handleResize = () => {
+      setWindowSize(window.innerWidth);
+    };
+    window.addEventListener("resize", handleResize);
+    return () => window.removeEventListener("resize", handleResize);
+  });
 
   useEffect(() => {
     axios
@@ -66,6 +75,7 @@ export default function RegMobilePassword() {
 
   return (
     <>
+      {windowSize < 550 ? "" : navigate("/register")}
       <Link to={"/register/email"}>{back}</Link>
       <div className="p-5 flex flex-col gap-2">
         <h1 className="text-3xl font-bold">Create a password</h1>

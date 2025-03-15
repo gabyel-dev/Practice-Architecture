@@ -3,7 +3,7 @@ import { useForm } from "../FormContext";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faArrowLeft } from "@fortawesome/free-solid-svg-icons";
 import axios from "axios";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 
 const back = (
   <FontAwesomeIcon icon={faArrowLeft} className="text-2xl px-5 py-5" />
@@ -12,6 +12,16 @@ const back = (
 export default function RegMobileEmail() {
   const navigate = useNavigate();
   const { formData, setFormData } = useForm();
+  const [windowSize, setWindowSize] = useState(window.innerWidth);
+
+  useEffect(() => {
+    const handleResize = () => {
+      setWindowSize(window.innerWidth);
+    };
+
+    window.addEventListener("resize", handleResize);
+    return () => window.removeEventListener("resize", handleResize);
+  });
 
   useEffect(() => {
     axios
@@ -36,6 +46,7 @@ export default function RegMobileEmail() {
 
   return (
     <>
+      {windowSize < 550 ? "" : navigate("/register")}
       <Link to={"/register/birthday"}>{back}</Link>
       <div className="p-5 flex flex-col gap-2">
         <h1 className="text-3xl font-bold">What's your email?</h1>
