@@ -47,7 +47,7 @@ def login():
             session["user"] = {"email": email, "id": user['id']} 
             return jsonify({'message': 'Login successful', 'redirect': "/dashboard"}), 200
         else:
-            return jsonify({'error': 'Invalid username or password', 'redirect': '/login'}), 401
+            return jsonify({'error': 'Invalid username or password', 'redirect': '/'}), 401
 
     except Exception as e:
         return jsonify({'error': f'Login failed: {str(e)}'}), 500
@@ -161,7 +161,7 @@ def user():
 @auth_bp.route('/dashboard')
 def dashboard():
     if "user" not in session:
-        return jsonify({'message': 'Session expired', 'redirect': '/login'}), 403
+        return jsonify({'message': 'Session expired', 'redirect': '/'}), 403
     return jsonify({'message': 'Welcome to the Dashboard', 'user': session['user']}), 200
 
 # ==============================
@@ -170,4 +170,4 @@ def dashboard():
 @auth_bp.route('/logout', methods=['POST'])
 def logout():
     session.clear()
-    return jsonify({'message': 'Logout successful', 'redirect': '/login'})
+    return jsonify({'message': 'Logout successful', 'redirect': '/'})
