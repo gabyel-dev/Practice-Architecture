@@ -32,21 +32,24 @@ export default function ForgotPassword() {
       });
   }, [navigate]);
 
-  try {
-    const handleReset = axios.post(
-      "http://localhost:5000/forgot_password",
-      forgotPassData,
-      {
-        withCredentials: true,
-        headers: {
-          "Content-Type": "application/json",
-        },
-      }
-    );
-    navigate("/");
-  } catch (error) {
-    Console.error("Something went wrong");
-  }
+  const handleReset = async (e) => {
+    e.preventDefault(); // Prevent default form submission behavior
+
+    try {
+      const res = await axios.post(
+        "http://localhost:5000/forgot_password",
+        forgotPassData,
+        {
+          withCredentials: true,
+          headers: { "Content-Type": "application/json" },
+        }
+      );
+      console.log("Password reset successful:", res.data);
+      navigate("/"); // Redirect after successful reset
+    } catch (error) {
+      console.error("Something went wrong:", error);
+    }
+  };
 
   return (
     <>
@@ -56,21 +59,43 @@ export default function ForgotPassword() {
           <h1 className="font-semibold text-2xl">Reset Password</h1>
         </div>
         <div>
-          <input
-            type="email"
-            placeholder="Enter email"
-            className="border-1 p-3 w-full rounded-2xl text-lg focus:outline-1 focus:outline-blue-500"
-          />
-          <input
-            type="password"
-            placeholder="Old password"
-            className="border-1 p-3 w-full rounded-2xl text-lg focus:outline-1 focus:outline-blue-500"
-          />
-          <input
-            type="password"
-            placeholder="New password"
-            className="border-1 p-3 w-full rounded-2xl text-lg focus:outline-1 focus:outline-blue-500"
-          />
+          <form onSubmit={handleReset}>
+            <input
+              type="email"
+              placeholder="Enter email"
+              value={forgotPassData.email}
+              onChange={(e) =>
+                setForgotPassData({
+                  ...forgotPassData,
+                  email: e.target.value,
+                })
+              }
+              className="border-1 p-3 w-full rounded-2xl text-lg focus:outline-1 focus:outline-blue-500"
+            />
+            <input
+              type="password"
+              placeholder="Old password"
+              className="border-1 p-3 w-full rounded-2xl text-lg focus:outline-1 focus:outline-blue-500"
+              onChange={(e) =>
+                setForgotPassData({
+                  ...forgotPassData,
+                  password: e.target.value,
+                })
+              }
+            />
+            <input
+              type="password"
+              placeholder="New password"
+              className="border-1 p-3 w-full rounded-2xl text-lg focus:outline-1 focus:outline-blue-500"
+              onChange={(e) =>
+                setForgotPassData({
+                  ...forgotPassData,
+                  newPassword: e.target.value,
+                })
+              }
+            />
+            <button type="submit">Submit</button>
+          </form>
         </div>
       </div>
     </>

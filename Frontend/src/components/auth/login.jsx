@@ -37,7 +37,7 @@ export default function Login() {
           },
         }
       );
-      navigate("/rdc?=dashboard");
+      navigate("/dashboard");
     } catch (error) {
       if (error.response?.status === 401) {
         setErrorMessage("The password you've entered is incorrect.");
