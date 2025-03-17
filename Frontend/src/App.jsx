@@ -30,7 +30,7 @@ function App() {
           <Route path="/m/register/birthday" element={<RegMobileBirthday />} />
           <Route path="/m/register/email" element={<RegMobileEmail />} />
           <Route path="/m/register/password" element={<RegMobilePassword />} />
-          <Route path="/m/forgot_password" element={<RegMobilePassword />} />
+          <Route path="/m/forgot_password" element={<ForgotPassword />} />
         </Routes>
       </Router>
     </FormProvider>
