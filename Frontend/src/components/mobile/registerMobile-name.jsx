@@ -42,7 +42,7 @@ export default function RegMobileName() {
   };
 
   const handleNext = () => {
-    navigate("/register/birthday");
+    navigate("/m/register/birthday");
   };
 
   return (

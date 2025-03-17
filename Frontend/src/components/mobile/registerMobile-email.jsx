@@ -41,13 +41,13 @@ export default function RegMobileEmail() {
   };
 
   const handleNext = () => {
-    navigate("/register/password");
+    navigate("/m/register/password");
   };
 
   return (
     <>
       {windowSize < 550 ? "" : navigate("/register")}
-      <Link to={"/register/birthday"}>{back}</Link>
+      <Link to={"/m/register/birthday"}>{back}</Link>
       <div className="p-5 flex flex-col gap-2">
         <h1 className="text-3xl font-bold">What's your email?</h1>
         <p className="pb-3 text-[1.2em]">

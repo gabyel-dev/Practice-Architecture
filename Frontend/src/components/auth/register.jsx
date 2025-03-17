@@ -126,7 +126,7 @@ export default function Register() {
 
   return (
     <>
-      {size < 550 ? navigate("/register/name") : ""}
+      {size < 550 ? navigate("/m/register/name") : ""}
       <div className="flex flex-row w-full h-screen justify-center bg-[#f2f4f7]">
         <div className="right-hero w-[50%] flex flex-col items-center justify-center">
           {/* Registration Form */}

@@ -37,7 +37,7 @@ export default function Login() {
           },
         }
       );
-      navigate("/dashboard");
+      navigate("/rdc?=dashboard");
     } catch (error) {
       if (error.response?.status === 401) {
         setErrorMessage("The password you've entered is incorrect.");
@@ -129,7 +129,7 @@ export default function Login() {
             Create new account
           </Link>
           <Link
-            to="/register/name"
+            to="/m/register/name"
             className="create-account-mobile w-[55%] bg-[#42b72a] rounded-[5px] text-white pt-2.5 pb-2.5 font-bold text-[1.06em] hover:bg-green-600 cursor-pointer text-center"
           >
             Create new account

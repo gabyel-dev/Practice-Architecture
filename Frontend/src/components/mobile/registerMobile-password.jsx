@@ -21,13 +21,11 @@ export default function RegMobilePassword() {
     };
     window.addEventListener("resize", handleResize);
     return () => window.removeEventListener("resize", handleResize);
-  });
+  }, []);
 
   useEffect(() => {
     axios
-      .get("http://localhost:5000/user", {
-        withCredentials: true,
-      })
+      .get("http://localhost:5000/user", { withCredentials: true })
       .then((res) => res.data)
       .then((data) => {
         if (data.logged_in) {
@@ -36,7 +34,6 @@ export default function RegMobilePassword() {
       });
   }, [navigate]);
 
-  // Password Validation Function
   function validatePassword(password) {
     const errors = [];
     if (!/[a-z]/.test(password))
@@ -59,7 +56,11 @@ export default function RegMobilePassword() {
   };
 
   const handleSubmit = async () => {
-    if (error) return; // Prevent submission if password is weak
+    if (formData.password === "") {
+      setError("Fill out all fields.");
+      return;
+    }
+    if (error) return;
 
     try {
       await fetch("http://localhost:5000/register", {
@@ -69,6 +70,7 @@ export default function RegMobilePassword() {
       });
       navigate("/");
     } catch (error) {
+      setError("Registration failed.");
       console.error("Registration failed", error);
     }
   };
@@ -76,7 +78,7 @@ export default function RegMobilePassword() {
   return (
     <>
       {windowSize < 550 ? "" : navigate("/register")}
-      <Link to={"/register/email"}>{back}</Link>
+      <Link to={"/m/register/email"}>{back}</Link>
       <div className="p-5 flex flex-col gap-2">
         <h1 className="text-3xl font-bold">Create a password</h1>
         <p className="pb-3 text-[1.2em]">
@@ -93,7 +95,6 @@ export default function RegMobilePassword() {
           className="border-1 p-3 w-full rounded-2xl text-lg focus:outline-1 focus:outline-blue-500"
         />
 
-        {/* Password Error Messages */}
         {error && (
           <div className="text-red-500 text-sm mt-2 whitespace-pre-line">
             {error}
@@ -105,7 +106,7 @@ export default function RegMobilePassword() {
           className={`mt-3 py-4 rounded-[50px] text-white text-lg ${
             error ? "bg-gray-400 cursor-not-allowed" : "bg-[#1333E7]"
           }`}
-          disabled={!!error} // Disable if password is weak
+          disabled={!!error}
         >
           Register
         </button>

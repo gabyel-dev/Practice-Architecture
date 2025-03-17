@@ -80,13 +80,13 @@ export default function RegMobileBirthday() {
     )}-${String(birthday.day).padStart(2, "0")}`;
 
     setFormData((prev) => ({ ...prev, birthday: formattedBirthday }));
-    navigate("/register/email");
+    navigate("/m/register/email");
   };
 
   return (
     <>
       {windowSize < 550 ? "" : navigate("/register")}
-      <Link to={"/register/name"}>{back}</Link>
+      <Link to={"/m/register/name"}>{back}</Link>
       <div className="p-5 flex flex-col gap-2">
         <h1 className="text-3xl font-bold">When's your birthday?</h1>
         <p className="pb-3 text-[1.2em]">

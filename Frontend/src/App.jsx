@@ -11,6 +11,7 @@ import { FormProvider } from "./components/FormContext"; // Import FormProvider
 import RegMobileBirthday from "./components/mobile/registerMobile-birthday";
 import RegMobileEmail from "./components/mobile/registerMobile-email";
 import RegMobilePassword from "./components/mobile/registerMobile-password";
+import ForgotPassword from "./components/mobile/ForgorPasswordMobile";
 
 function App() {
   return (
@@ -25,10 +26,11 @@ function App() {
           <Route path="/terms_and_condition" element={<TermsAndConditions />} />
           <Route path="/register" element={<RegisterBody />} />
           <Route path="/dashboard" element={<Dashboard />} />
-          <Route path="/register/name" element={<RegMobileName />} />
-          <Route path="/register/birthday" element={<RegMobileBirthday />} />
-          <Route path="/register/email" element={<RegMobileEmail />} />
-          <Route path="/register/password" element={<RegMobilePassword />} />
+          <Route path="/m/register/name" element={<RegMobileName />} />
+          <Route path="/m/register/birthday" element={<RegMobileBirthday />} />
+          <Route path="/m/register/email" element={<RegMobileEmail />} />
+          <Route path="/m/register/password" element={<RegMobilePassword />} />
+          <Route path="/m/forgot_password" element={<RegMobilePassword />} />
         </Routes>
       </Router>
     </FormProvider>
