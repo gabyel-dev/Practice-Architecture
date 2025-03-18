@@ -152,8 +152,8 @@ def forgot_password():
 @auth_bp.route('/user')
 def user():
     if "user" in session:
-        return jsonify({'user': session["user"], 'logged_in': True, 'redirect': '/rdc?=dashboard'}), 200
-    return jsonify({'user': None, 'logged_in': False, 'redirect': '/rdc?=login'}), 200
+        return jsonify({'user': session["user"], 'logged_in': True, 'redirect': '/dashboard'}), 200
+    return jsonify({'user': None, 'logged_in': False, 'redirect': '/'}), 200
 
 # ==============================
 # Dashboard Access

@@ -8,12 +8,13 @@ import {
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
+import Footer from "../Footer";
 
 const backBtn = (
   <FontAwesomeIcon icon={faArrowLeft} className="text-2xl px-5 py-5" />
 );
-const show = <FontAwesomeIcon icon={faEye} />;
-const hide = <FontAwesomeIcon icon={faEyeSlash} />;
+const show = <FontAwesomeIcon icon={faEye} className="text-gray-500" />;
+const hide = <FontAwesomeIcon icon={faEyeSlash} className="text-gray-500" />;
 
 export default function ForgotPassword() {
   const navigate = useNavigate();
@@ -49,7 +50,7 @@ export default function ForgotPassword() {
       .get("http://localhost:5000/user", { withCredentials: true })
       .then((res) => res.data)
       .then((data) => {
-        if (data.logged_in) navigate("/dashboard");
+        if (data.logged_in) navigate(data.redirect);
       });
   }, [navigate]);
 
@@ -74,7 +75,7 @@ export default function ForgotPassword() {
   return (
     <>
       <Link to={"/"}>{backBtn}</Link>
-      <div className="h-[100vh] w-[100%] p-5 flex flex-col gap-9">
+      <div className="h-[90vh] w-[100%] p-5 flex flex-col gap-9">
         <div>
           <h1 className="font-semibold text-2xl">Reset Password</h1>
           <p>
@@ -138,6 +139,7 @@ export default function ForgotPassword() {
           </button>
         </form>
       </div>
+      <Footer />
     </>
   );
 }

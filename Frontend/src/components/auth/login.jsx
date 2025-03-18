@@ -3,13 +3,26 @@ import { useState, useEffect, useRef } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import "./css/base.css";
 import "./css/mobileLogin.css";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faEye, faEyeSlash } from "@fortawesome/free-solid-svg-icons";
+
+const show = <FontAwesomeIcon icon={faEye} className="text-gray-500" />;
+const hide = <FontAwesomeIcon icon={faEyeSlash} className="text-gray-500" />;
 
 export default function Login() {
   const navigate = useNavigate();
+  const [values, setValues] = useState({
+    showPassword: true,
+  });
   const [errorMsg, setErrorMessage] = useState("");
   const [loading, setLoading] = useState(false);
   const [loginData, setLoginData] = useState({ email: "" });
   const passwordRef = useRef(null); // Use ref instead of state for passwords
+
+  const handleClick = (e) => {
+    e.preventDefault();
+    setValues({ showPassword: !values.showPassword });
+  };
 
   useEffect(() => {
     document.title = "!Facebook - Login";
@@ -78,16 +91,21 @@ export default function Login() {
               setLoginData({ ...loginData, email: e.target.value })
             }
             required
-            className="w-full h-13 text-md border-gray-200 border-2 rounded-md p-3 focus:outline-1 focus:outline-[#0866ff]"
+            className="w-full h-13 text-md border-gray-200 border-2 rounded-md p-3 outline-0"
           />
 
-          <input
-            type="password"
-            placeholder="Password"
-            ref={passwordRef}
-            required
-            className="w-full h-13 text-md border-gray-200 border-2 rounded-md p-3 focus:outline-1 focus:outline-[#0866ff]"
-          />
+          <div className="w-full h-13 text-md border-gray-200 border-2 rounded-2xl focus:outline-1 p-3 focus:outline-[#0866ff] flex ">
+            <input
+              type={values.showPassword ? "password" : "text"}
+              placeholder="Password"
+              ref={passwordRef}
+              required
+              className="outline-0 w-[95%] rounded-0 "
+            />
+            <button onClick={handleClick}>
+              {values.showPassword ? show : hide}
+            </button>
+          </div>
 
           {errorMsg && (
             <p className="text-red-500 text-[0.8em]">
