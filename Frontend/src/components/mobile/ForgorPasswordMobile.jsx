@@ -18,34 +18,28 @@ const hide = <FontAwesomeIcon icon={faEyeSlash} className="text-gray-500" />;
 
 export default function ForgotPassword() {
   const navigate = useNavigate();
-  const [valueNew, setValueNew] = useState({ showPassword: true });
-  const [valueOld, setValueOld] = useState({ showPassword: true });
+  const [passwordVisibility, setPasswordVisibility] = useState({
+    oldPassword: true,
+    newPassword: true,
+  });
   const [error, setError] = useState("");
+  const [errors, setErrors] = useState("");
+  const [invalidEmail, setInvalidEmail] = useState(false);
   const [forgotPassData, setForgotPassData] = useState({
     email: "",
     password: "",
     newPassword: "",
   });
 
-  const handleClickNew = () =>
-    setValueNew({ showPassword: !valueNew.showPassword });
-  const handleClickOld = () =>
-    setValueOld({ showPassword: !valueOld.showPassword });
+  const togglePasswordVisibility = (field) => {
+    setPasswordVisibility((prev) => ({
+      ...prev,
+      [field]: !prev[field],
+    }));
+  };
 
   useEffect(() => {
-    if (
-      forgotPassData.password &&
-      forgotPassData.password === forgotPassData.newPassword
-    ) {
-      setError("Password cannot be the same as Old password");
-    } else {
-      setError("");
-    }
-  }, [forgotPassData.password, forgotPassData.newPassword]);
-
-  useEffect(() => {
-    document.title = "!Facebook - forgot-password";
-
+    document.title = "Facebook - Forgot Password";
     axios
       .get("http://localhost:5000/user", { withCredentials: true })
       .then((res) => res.data)
@@ -54,8 +48,20 @@ export default function ForgotPassword() {
       });
   }, [navigate]);
 
+  useEffect(() => {
+    if (
+      forgotPassData.password &&
+      forgotPassData.password === forgotPassData.newPassword
+    ) {
+      setError("New password cannot be the same as old password.");
+    } else {
+      setError("");
+    }
+  }, [forgotPassData.password, forgotPassData.newPassword]);
+
   const handleReset = async (e) => {
     e.preventDefault();
+    setInvalidEmail(false);
 
     try {
       await axios.post(
@@ -68,7 +74,14 @@ export default function ForgotPassword() {
       );
       navigate("/");
     } catch (error) {
-      console.error("Something went wrong:", error);
+      if (error.response?.status === 401) {
+        setError("The password you've entered is incorrect.");
+      } else if (error.response?.status === 400) {
+        setInvalidEmail(true);
+      } else {
+        setErrors("Error resetting password. Please try again later.");
+        console.error("Reset password error:", error);
+      }
     }
   };
 
@@ -88,16 +101,23 @@ export default function ForgotPassword() {
             type="email"
             placeholder="Enter email"
             value={forgotPassData.email}
+            autoComplete="off"
             onChange={(e) =>
               setForgotPassData({ ...forgotPassData, email: e.target.value })
             }
             className="border-1 p-3 w-full rounded-2xl text-lg focus:outline-1 focus:outline-blue-500"
           />
+          {invalidEmail && (
+            <p className="text-red-500 text-sm">
+              No user found with this email.
+            </p>
+          )}
           <div className="flex border-1 p-3 w-full rounded-2xl text-lg focus:outline-1 focus:outline-blue-500">
             <input
-              type={valueOld.showPassword ? "password" : "text"}
+              type={passwordVisibility.oldPassword ? "password" : "text"}
               placeholder="Old password"
               value={forgotPassData.password}
+              autoComplete="off"
               onChange={(e) =>
                 setForgotPassData({
                   ...forgotPassData,
@@ -106,16 +126,21 @@ export default function ForgotPassword() {
               }
               className="w-[95%] outline-0"
             />
-            <button type="button" onClick={handleClickOld}>
-              {valueOld.showPassword ? show : hide}
+            <button
+              type="button"
+              onClick={() => togglePasswordVisibility("oldPassword")}
+            >
+              {passwordVisibility.oldPassword ? show : hide}
             </button>
           </div>
+          {error && <p className="text-red-500 text-sm">{error}</p>}
 
           <div className="flex border-1 p-3 w-full rounded-2xl text-lg focus:outline-1 focus:outline-blue-500">
             <input
-              type={valueNew.showPassword ? "password" : "text"}
+              type={passwordVisibility.newPassword ? "password" : "text"}
               placeholder="New password"
               value={forgotPassData.newPassword}
+              autoComplete="off"
               onChange={(e) =>
                 setForgotPassData({
                   ...forgotPassData,
@@ -124,12 +149,15 @@ export default function ForgotPassword() {
               }
               className="w-[95%] outline-0"
             />
-            <button type="button" onClick={handleClickNew}>
-              {valueNew.showPassword ? show : hide}
+            <button
+              type="button"
+              onClick={() => togglePasswordVisibility("newPassword")}
+            >
+              {passwordVisibility.newPassword ? show : hide}
             </button>
           </div>
 
-          {error && <p className="text-red-500 text-sm">{error}</p>}
+          {errors && <p className="text-red-500 text-sm">{errors}</p>}
 
           <button
             type="submit"
