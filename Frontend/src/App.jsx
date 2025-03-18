@@ -1,4 +1,4 @@
-import { HashRouter as Router, Routes, Route } from "react-router-dom";
+import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import LoginBody from "./components/body/login_body";
 import ForgotBody from "./components/body/forgot_password_body";
 import RegisterBody from "./components/body/register_body";
@@ -12,6 +12,7 @@ import RegMobileBirthday from "./components/mobile/registerMobile-birthday";
 import RegMobileEmail from "./components/mobile/registerMobile-email";
 import RegMobilePassword from "./components/mobile/registerMobile-password";
 import ForgotPassword from "./components/mobile/ForgorPasswordMobile";
+import Profile from "./components/auth/Profile";
 
 function App() {
   return (
@@ -20,6 +21,7 @@ function App() {
       {/* Wrap everything with FormProvider */}
       <Router>
         <Routes>
+          <Route path="/profile/:id" element={<Profile />} />
           <Route path="/" element={<LoginBody />} />
           <Route path="/forgot_password" element={<ForgotBody />} />
           <Route path="/learn_more" element={<LearnMorePage />} />

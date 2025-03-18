@@ -31,11 +31,22 @@ export default function ForgotPassword() {
     newPassword: "",
   });
 
+  function validatePassword(password) {
+    const errors = [];
+    if (!/[a-z]/.test(password))
+      errors.push("• At least one lowercase letter required.");
+    if (!/[A-Z]/.test(password))
+      errors.push("• At least one uppercase letter required.");
+    if (!/\d/.test(password)) errors.push("• At least one number required.");
+    if (!/\W/.test(password))
+      errors.push("• At least one special character required.");
+    if (password.length < 8)
+      errors.push("• Password must be at least 8 characters long.");
+    return errors.length === 0 ? true : errors;
+  }
+
   const togglePasswordVisibility = (field) => {
-    setPasswordVisibility((prev) => ({
-      ...prev,
-      [field]: !prev[field],
-    }));
+    setPasswordVisibility((prev) => ({ ...prev, [field]: !prev[field] }));
   };
 
   useEffect(() => {
@@ -45,7 +56,8 @@ export default function ForgotPassword() {
       .then((res) => res.data)
       .then((data) => {
         if (data.logged_in) navigate(data.redirect);
-      });
+      })
+      .catch((err) => console.error("Error fetching user data:", err));
   }, [navigate]);
 
   useEffect(() => {
@@ -62,7 +74,6 @@ export default function ForgotPassword() {
   const handleReset = async (e) => {
     e.preventDefault();
     setInvalidEmail(false);
-
     try {
       await axios.post(
         "http://localhost:5000/forgot_password",
@@ -105,14 +116,15 @@ export default function ForgotPassword() {
             onChange={(e) =>
               setForgotPassData({ ...forgotPassData, email: e.target.value })
             }
-            className="border-1 p-3 w-full rounded-2xl text-lg focus:outline-1 focus:outline-blue-500"
+            className="border border-gray-300 p-3 w-full rounded-2xl text-lg focus:outline-1 focus:outline-blue-500"
           />
           {invalidEmail && (
             <p className="text-red-500 text-sm">
               No user found with this email.
             </p>
           )}
-          <div className="flex border-1 p-3 w-full rounded-2xl text-lg focus:outline-1 focus:outline-blue-500">
+
+          <div className="flex border border-gray-300 p-3 w-full rounded-2xl text-lg focus:outline-1 focus:outline-blue-500">
             <input
               type={passwordVisibility.oldPassword ? "password" : "text"}
               placeholder="Old password"
@@ -135,18 +147,20 @@ export default function ForgotPassword() {
           </div>
           {error && <p className="text-red-500 text-sm">{error}</p>}
 
-          <div className="flex border-1 p-3 w-full rounded-2xl text-lg focus:outline-1 focus:outline-blue-500">
+          <div className="flex border border-gray-300 p-3 w-full rounded-2xl text-lg focus:outline-1 focus:outline-blue-500">
             <input
               type={passwordVisibility.newPassword ? "password" : "text"}
               placeholder="New password"
               value={forgotPassData.newPassword}
               autoComplete="off"
-              onChange={(e) =>
+              onChange={(e) => {
                 setForgotPassData({
                   ...forgotPassData,
                   newPassword: e.target.value,
-                })
-              }
+                });
+                const validation = validatePassword(e.target.value);
+                setErrors(validation === true ? "" : validation.join("\n"));
+              }}
               className="w-[95%] outline-0"
             />
             <button
@@ -157,11 +171,28 @@ export default function ForgotPassword() {
             </button>
           </div>
 
-          {errors && <p className="text-red-500 text-sm">{errors}</p>}
+          {errors && (
+            <div className="text-red-500 text-sm flex flex-col text-left">
+              {errors.split("\n").map((err, index) => (
+                <p key={index}>{err}</p>
+              ))}
+            </div>
+          )}
 
           <button
             type="submit"
-            className="bg-[#1333E7] mt-3 py-4 rounded-[50px] text-white text-lg"
+            disabled={
+              !forgotPassData.email ||
+              !forgotPassData.password ||
+              !forgotPassData.newPassword
+            }
+            className={`mt-3 py-4 rounded-[50px] text-white text-lg ${
+              !forgotPassData.email ||
+              !forgotPassData.password ||
+              !forgotPassData.newPassword
+                ? "bg-gray-400 cursor-not-allowed"
+                : "bg-[#1333E7]"
+            }`}
           >
             Submit
           </button>

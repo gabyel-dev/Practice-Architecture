@@ -1,22 +1,28 @@
 import { useEffect } from "react";
 import axios from "axios";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
 import DashboardHeader from "../Headers/DashboardHeader";
 
 export default function Dashboard() {
   const navigate = useNavigate();
+  const location = useLocation();
+
   useEffect(() => {
-    axios
-      .get("http://localhost:5000/user", {
-        withCredentials: true,
-      })
-      .then((res) => res.data)
-      .then((data) => {
-        if (!data.logged_in) {
+    const checkSession = async () => {
+      try {
+        const res = await axios.get("http://localhost:5000/user", {
+          withCredentials: true, // Ensure cookies are sent
+        });
+        if (!res.data.logged_in) {
           navigate("/");
         }
-      });
-  }, [navigate]);
+      } catch (error) {
+        console.error("Session check failed:", error);
+      }
+    };
+
+    checkSession();
+  }, [navigate, location.pathname]);
 
   const logout = async () => {
     try {
@@ -25,7 +31,7 @@ export default function Dashboard() {
         {},
         { withCredentials: true }
       );
-      navigate("/"); // Redirect to login after logout
+      navigate("/");
     } catch (error) {
       console.error("Logout failed:", error);
     }
@@ -39,7 +45,7 @@ export default function Dashboard() {
         onClick={logout}
         className="bg-gray-500 text-white py-2 px-4 rounded-lg cursor-pointer"
       >
-        logout
+        Logout
       </button>
     </>
   );

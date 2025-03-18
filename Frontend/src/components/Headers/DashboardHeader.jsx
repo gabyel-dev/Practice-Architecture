@@ -1,33 +1,132 @@
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import axios from "axios";
 import { faHouse, faSearch } from "@fortawesome/free-solid-svg-icons";
+import { useState, useEffect, useRef } from "react";
+import { useNavigate } from "react-router-dom";
 
 export default function DashboardHeader() {
+  const [result, setResult] = useState([]);
+  const [query, setQuery] = useState("");
+  const [showResults, setShowResults] = useState(false);
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState("");
+  const searchRef = useRef(null);
+  const navigate = useNavigate();
+
+  const handleSearch = async () => {
+    if (!query.trim()) {
+      setResult([]);
+      setShowResults(false);
+      return;
+    }
+
+    setLoading(true);
+    setError("");
+
+    try {
+      const res = await axios.get(
+        `http://localhost:5000/search?query=${query}`
+      );
+      console.log("Search API Response:", res.data); // Debugging
+
+      if (Array.isArray(res.data.users)) {
+        setResult(res.data.users);
+      } else {
+        console.error("Unexpected API Response:", res.data);
+        setResult([]);
+      }
+
+      setShowResults(true);
+    } catch (error) {
+      console.error("Error searching:", error);
+      setError("Something went wrong. Please try again.");
+      setResult([]);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const handleUserClick = (userId) => {
+    navigate(`/profile/${userId}`);
+    setShowResults(false);
+    setQuery("");
+    setResult([]);
+  };
+
+  useEffect(() => {
+    const handleClickOutside = (event) => {
+      if (searchRef.current && !searchRef.current.contains(event.target)) {
+        setShowResults(false);
+      }
+    };
+
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => document.removeEventListener("mousedown", handleClickOutside);
+  }, []);
+
   return (
-    <div className="flex items-center pl-5 pr-5 pt-1 pb-1 justify-between bg-white text-white shadow-sm box-border">
-      {/* Search Bar with Icon */}
-      <div className="flex items-center gap-3">
-        {/* Logo */}
+    <div className="relative flex items-center px-5 py-1 justify-between bg-white shadow-sm">
+      {/* Search Bar */}
+      <div className="flex items-center gap-3 relative" ref={searchRef}>
         <img src="/_fb_logo.png" alt="logo" className="w-10 h-10" />
-        <div className="flex items-center px-3 py-1 rounded-3xl border border-gray-300 bg-gray-100 text-[#1c1e21]">
+
+        <div className="flex items-center px-3 py-1 rounded-3xl border border-gray-300 bg-gray-100 relative w-60">
           <FontAwesomeIcon icon={faSearch} className="text-gray-400 mr-2" />
           <input
             type="text"
-            className="bg-transparent outline-none placeholder-gray-400"
+            className="bg-transparent outline-none placeholder-gray-400 w-full"
             placeholder="Search"
+            value={query}
+            onChange={(e) => {
+              setQuery(e.target.value);
+              if (!e.target.value.trim()) {
+                setResult([]);
+                setShowResults(false);
+              }
+            }}
+            onKeyDown={(e) => e.key === "Enter" && handleSearch()}
           />
         </div>
+
+        {/* Search Results Dropdown */}
+        {showResults && (
+          <div className="absolute top-full left-0 bg-white border border-gray-300 mt-2 w-60 rounded-lg shadow-md z-10">
+            {loading ? (
+              <div className="p-2 text-gray-500">Loading...</div>
+            ) : error ? (
+              <div className="p-2 text-red-500">{error}</div>
+            ) : result.length === 0 ? (
+              <div className="p-2 text-gray-500">No results found</div>
+            ) : (
+              result.map((user) => (
+                <div
+                  key={user.id}
+                  onClick={() => handleUserClick(user.id)}
+                  className="block p-2 hover:bg-gray-100 cursor-pointer text-black"
+                >
+                  {user.first_name} {user.last_name}
+                </div>
+              ))
+            )}
+          </div>
+        )}
       </div>
 
       {/* Icons Section */}
       <div className="flex gap-4">
-        {/* Home Icon with Border */}
         <div className="w-12 h-12 flex items-center justify-center border-2 rounded-full">
           <FontAwesomeIcon icon={faHouse} size="xl" className="text-gray-300" />
         </div>
       </div>
+
+      {/* Profile Icon */}
       <div>
-        <div className="w-10 h-10 flex justify-center items-center border-1 border-[#1c1e21] rounded-4xl">
-          <img src="_/" alt="profile_icon" />
+        <div className="w-10 h-10 flex justify-center items-center border border-gray-300 rounded-full overflow-hidden">
+          <img
+            src="/profile_icon.png"
+            alt="Profile Icon"
+            className="w-full h-full object-cover"
+          />
         </div>
       </div>
     </div>
