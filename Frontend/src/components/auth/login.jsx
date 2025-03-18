@@ -121,6 +121,13 @@ export default function Login() {
           >
             Forgot password?
           </Link>
+
+          <Link
+            to="/m/forgot_password"
+            className="forgot-mobile text-[#0866ff] text-[0.9em]"
+          >
+            Forgot password?
+          </Link>
           <hr className="border-t-1 border-gray-300 w-full mt-2 mb-3" />
           <Link
             to="/register"
