@@ -27,7 +27,9 @@ export default function Login() {
   useEffect(() => {
     document.title = "!Facebook - Login";
     axios
-      .get("epbi-production.up.railway.app/user", { withCredentials: true })
+      .get("https://epbi-production.up.railway.app/user", {
+        withCredentials: true,
+      })
       .then((res) => {
         if (res.data.logged_in) navigate(res.data.redirect);
       })
@@ -41,7 +43,7 @@ export default function Login() {
 
     try {
       await axios.post(
-        "epbi-production.up.railway.app/login",
+        "https://epbi-production.up.railway.app/login",
         { ...loginData, password: passwordRef.current.value },
         {
           withCredentials: true,

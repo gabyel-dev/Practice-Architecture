@@ -25,7 +25,7 @@ export default function RegMobileName() {
 
   useEffect(() => {
     axios
-      .get("epbi-production.up.railway.app/user", {
+      .get("https://epbi-production.up.railway.app/user", {
         withCredentials: true,
       })
       .then((res) => res.data)

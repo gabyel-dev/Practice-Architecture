@@ -63,7 +63,7 @@ export default function RegMobilePassword() {
     if (error) return;
 
     try {
-      await fetch("epbi-production.up.railway.app/register", {
+      await fetch("https://epbi-production.up.railway.app/register", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(formData),

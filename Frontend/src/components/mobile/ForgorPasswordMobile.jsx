@@ -52,7 +52,9 @@ export default function ForgotPassword() {
   useEffect(() => {
     document.title = "Facebook - Forgot Password";
     axios
-      .get("epbi-production.up.railway.app/user", { withCredentials: true })
+      .get("https://epbi-production.up.railway.app/user", {
+        withCredentials: true,
+      })
       .then((res) => res.data)
       .then((data) => {
         if (data.logged_in) navigate(data.redirect);

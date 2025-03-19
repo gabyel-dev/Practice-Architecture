@@ -25,7 +25,9 @@ export default function Dashboard() {
 
   const fetchPosts = async () => {
     try {
-      const res = await axios.get("epbi-production.up.railway.app/posts");
+      const res = await axios.get(
+        "https://epbi-production.up.railway.app/posts"
+      );
       setPosts(res.data || []);
     } catch (error) {
       console.error("Error fetching posts:", error);
@@ -40,9 +42,13 @@ export default function Dashboard() {
     }
 
     try {
-      await axios.post("epbi-production.up.railway.app/post", postData, {
-        headers: { "Content-Type": "application/json" },
-      });
+      await axios.post(
+        "https://epbi-production.up.railway.app/post",
+        postData,
+        {
+          headers: { "Content-Type": "application/json" },
+        }
+      );
       setPostData({ user_id: postData.user_id, content: "" });
       fetchPosts();
     } catch (error) {
@@ -54,7 +60,9 @@ export default function Dashboard() {
     if (!window.confirm("Are you sure you want to delete this post?")) return;
 
     try {
-      await axios.delete(`epbi-production.up.railway.app/posts/${postId}`);
+      await axios.delete(
+        `https://epbi-production.up.railway.app/posts/${postId}`
+      );
       setPosts(posts.filter((post) => post.id !== postId));
     } catch (error) {
       console.error("Error deleting post:", error);
@@ -64,9 +72,12 @@ export default function Dashboard() {
   useEffect(() => {
     const checkSession = async () => {
       try {
-        const res = await axios.get("epbi-production.up.railway.app/user", {
-          withCredentials: true,
-        });
+        const res = await axios.get(
+          "https://epbi-production.up.railway.app/user",
+          {
+            withCredentials: true,
+          }
+        );
 
         if (!res.data.logged_in) {
           navigate("/");
@@ -93,7 +104,7 @@ export default function Dashboard() {
   const logout = async () => {
     try {
       await axios.post(
-        "epbi-production.up.railway.app/logout",
+        "https://epbi-production.up.railway.app/logout",
         {},
         { withCredentials: true }
       );

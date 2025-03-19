@@ -19,7 +19,9 @@ export default function ForgotHeader() {
   useEffect(() => {
     document.title = "!Facebook - Forgot Password";
     axios
-      .get("epbi-production.up.railway.app/user", { withCredentials: true })
+      .get("https://epbi-production.up.railway.app/user", {
+        withCredentials: true,
+      })
       .then((res) => {
         if (res.data.logged_in) navigate(res.data.redirect);
       })
@@ -35,12 +37,16 @@ export default function ForgotHeader() {
     setFadeOut(false);
 
     try {
-      await axios.post("epbi-production.up.railway.app/login", loginData, {
-        withCredentials: true,
-        headers: {
-          "Content-Type": "application/json",
-        },
-      });
+      await axios.post(
+        "https://epbi-production.up.railway.app/login",
+        loginData,
+        {
+          withCredentials: true,
+          headers: {
+            "Content-Type": "application/json",
+          },
+        }
+      );
       navigate("/dashboard");
     } catch (error) {
       if (error.response?.status === 401 || error.response?.status === 400) {

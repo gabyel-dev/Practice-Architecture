@@ -95,7 +95,9 @@ export default function Register() {
   useEffect(() => {
     document.title = "!Facebook - Register";
     axios
-      .get("epbi-production.up.railway.app/user", { withCredentials: true })
+      .get("https://epbi-production.up.railway.app/user", {
+        withCredentials: true,
+      })
       .then((res) => res.data)
       .then((data) => {
         if (data.logged_in) navigate("/dashboard");
@@ -105,6 +107,7 @@ export default function Register() {
   // Handle Registration Submit
   const handleRegister = async (e) => {
     e.preventDefault();
+
     const passwordValidation = validatePassword(registerData.password);
     if (passwordValidation !== true) {
       setError(passwordValidation.join("\n"));
@@ -114,17 +117,25 @@ export default function Register() {
     }
 
     try {
-      await axios.post(
-        "epbi-production.up.railway.app/register",
-        registerData,
+      const response = await fetch(
+        "https://epbi-production.up.railway.app/register",
         {
+          method: "POST",
           headers: { "Content-Type": "application/json" },
-          withCredentials: true,
+          credentials: "include", // Keep cookies for authentication
+          body: JSON.stringify(registerData),
         }
       );
+
+      if (!response.ok) {
+        throw new Error(`HTTP error! Status: ${response.status}`);
+      }
+
+      const data = await response.json();
+      console.log("Success:", data);
       navigate("/");
     } catch (error) {
-      console.log("Error registering user", error);
+      console.error("Error registering user:", error);
     }
   };
 

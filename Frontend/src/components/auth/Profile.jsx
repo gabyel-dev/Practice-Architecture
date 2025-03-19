@@ -30,7 +30,7 @@ export default function Profile() {
       try {
         console.log("Fetching user with ID:", id);
         const res = await axios.get(
-          `epbi-production.up.railway.app/user/${id}`
+          `https://epbi-production.up.railway.app/user/${id}`
         );
         setUser(res.data);
         setError(null);
@@ -50,7 +50,7 @@ export default function Profile() {
       try {
         console.log("Fetching posts for user ID:", id);
         const res = await axios.get(
-          `epbi-production.up.railway.app/user_posts/${id}`
+          `https://epbi-production.up.railway.app/user_posts/${id}`
         );
         setPosts(res.data);
         setPostError(null);

@@ -32,7 +32,7 @@ export default function ForgotPassword() {
 
   useEffect(() => {
     axios
-      .get("epbi-production.up.railway.app/user", {
+      .get("https://epbi-production.up.railway.app/user", {
         withCredentials: true,
       })
       .then((res) => res.data)
@@ -48,12 +48,16 @@ export default function ForgotPassword() {
     setLoading(true);
     setErrorMessage(""); // Clear previous errors
     try {
-      axios.post("epbi-production.up.railway.app/forgot_password", loginData, {
-        headers: {
-          "Content-Type": "application/json",
-        },
-        withCredentials: true,
-      });
+      axios.post(
+        "https://epbi-production.up.railway.app/forgot_password",
+        loginData,
+        {
+          headers: {
+            "Content-Type": "application/json",
+          },
+          withCredentials: true,
+        }
+      );
       navigate("/");
     } catch {
       if (error.response?.status === 401) {
