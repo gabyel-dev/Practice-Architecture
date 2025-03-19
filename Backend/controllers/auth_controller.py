@@ -225,8 +225,7 @@ def create_post():
         return jsonify({"message": "Post created successfully", "post": new_post}), 201
     except Exception as e:
         return jsonify({"error": str(e)}), 500
-        
-# ==============================
+
 # ==============================
 # GET POSTS
 # ==============================
@@ -295,25 +294,32 @@ def get_user_posts(id):
 # ==============================
 @auth_bp.route('/posts/<int:post_id>', methods=['DELETE'])
 def del_post(post_id):
-    try:
-        conn = get_db_connection()
-        cursor = conn.cursor()
+    if "user" not in session:
+        return jsonify({"error": "Unauthorized"}), 401  # Ensure user is logged in
 
-        # Check if post exists
-        cursor.execute("SELECT * FROM posts WHERE id = %s", (post_id,))
+    user_id = session["user"]["id"]  # Get logged-in user ID
+
+    conn = get_db_connection()
+    cursor = conn.cursor()
+
+    try:
+        # Check if post exists and belongs to the logged-in user
+        cursor.execute("SELECT user_id FROM posts WHERE id = %s", (post_id,))
         post = cursor.fetchone()
 
         if not post:
             return jsonify({"error": "Post not found"}), 404
+        
+        if post["user_id"] != user_id:
+            return jsonify({"error": "You can only delete your own posts"}), 403  # Forbidden
 
-        # Delete the post
+        # Delete the post if the user is the owner
         cursor.execute("DELETE FROM posts WHERE id = %s", (post_id,))
         conn.commit()
 
         return jsonify({"message": "Post deleted successfully", "post_id": post_id}), 200
     except Exception as e:
-        print(f"Error deleting post {post_id}: {str(e)}")  # Debugging log
-        return jsonify({"error": "An error occurred while deleting the post"}), 500
+        return jsonify({"error": f"An error occurred while deleting the post: {str(e)}"}), 500
     finally:
         cursor.close()
         conn.close()

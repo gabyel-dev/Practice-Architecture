@@ -17,8 +17,6 @@ import Profile from "./components/auth/Profile";
 function App() {
   return (
     <FormProvider>
-      {" "}
-      {/* Wrap everything with FormProvider */}
       <Router>
         <Routes>
           <Route path="/profile/:id" element={<Profile />} />

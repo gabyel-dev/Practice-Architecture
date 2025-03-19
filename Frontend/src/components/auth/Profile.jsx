@@ -6,16 +6,18 @@ import DashboardHeader from "../Headers/DashboardHeader";
 export default function Profile() {
   const { id } = useParams();
   const [user, setUser] = useState(null);
+  const [loggedInUser, setLoggedInUser] = useState(null);
   const [error, setError] = useState(null);
   const [posts, setPosts] = useState([]);
   const [postError, setPostError] = useState(null);
 
+  // Function to format timestamps
   const formatTimeAgo = (createdAt) => {
     const createdTime = new Date(createdAt);
     const now = new Date();
     const diffInSeconds = Math.floor((now - createdTime) / 1000);
 
-    if (diffInSeconds < 60) return "just now";
+    if (diffInSeconds < 60) return "Just now";
     if (diffInSeconds < 3600)
       return `${Math.floor(diffInSeconds / 60)} min ago`;
     if (diffInSeconds < 86400)
@@ -23,12 +25,39 @@ export default function Profile() {
     return `${Math.floor(diffInSeconds / 86400)} days ago`;
   };
 
+  // Delete post function (only if logged-in user is the owner)
+  const deletePost = async (postId) => {
+    if (!window.confirm("Are you sure you want to delete this post?")) return;
+
+    try {
+      await axios.delete(
+        `https://epbi-production.up.railway.app/posts/${postId}`
+      );
+      setPosts(posts.filter((post) => post.id !== postId));
+    } catch (error) {
+      console.error("Error deleting post:", error);
+    }
+  };
+
   useEffect(() => {
     if (!id || id === "0") return;
 
+    // Fetch logged-in user info
+    const fetchLoggedInUser = async () => {
+      try {
+        const res = await axios.get(
+          "https://epbi-production.up.railway.app/user",
+          { withCredentials: true }
+        );
+        setLoggedInUser(res.data);
+      } catch (error) {
+        console.error("Error fetching logged-in user:", error);
+      }
+    };
+
+    // Fetch profile user data
     const fetchUser = async () => {
       try {
-        console.log("Fetching user with ID:", id);
         const res = await axios.get(
           `https://epbi-production.up.railway.app/user/${id}`
         );
@@ -40,15 +69,9 @@ export default function Profile() {
       }
     };
 
-    fetchUser();
-  }, [id]);
-
-  useEffect(() => {
-    if (!id || id === "0") return;
-
+    // Fetch posts
     const fetchPosts = async () => {
       try {
-        console.log("Fetching posts for user ID:", id);
         const res = await axios.get(
           `https://epbi-production.up.railway.app/user_posts/${id}`
         );
@@ -60,6 +83,8 @@ export default function Profile() {
       }
     };
 
+    fetchLoggedInUser();
+    fetchUser();
     fetchPosts();
   }, [id]);
 
@@ -77,7 +102,7 @@ export default function Profile() {
             alt="Cover"
             className="w-full h-full object-cover"
           />
-          {/* Profile Picture - Positioned outside cover */}
+          {/* Profile Picture */}
           <div className="absolute left-1/2 transform -translate-x-1/2 bottom-[-30px] sm:bottom-[-40px] md:bottom-[-50px] flex justify-center">
             <img
               src={
@@ -133,10 +158,18 @@ export default function Profile() {
                   {post.content}
                 </p>
 
-                {/* Post Actions */}
+                {/* Post Actions (Only allow delete if logged-in user is the owner) */}
                 <div className="mt-3 flex justify-between text-gray-500 text-xs sm:text-sm">
                   <button className="hover:underline">Like</button>
                   <button className="hover:underline">Comment</button>
+                  {loggedInUser?.id === post.user_id && (
+                    <button
+                      className="hover:underline text-red-500"
+                      onClick={() => deletePost(post.id)}
+                    >
+                      Delete
+                    </button>
+                  )}
                 </div>
               </div>
             ))

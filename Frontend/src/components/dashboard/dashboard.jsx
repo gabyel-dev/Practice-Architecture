@@ -56,37 +56,25 @@ export default function Dashboard() {
     }
   };
 
-  const deletePost = async (postId) => {
-    if (!window.confirm("Are you sure you want to delete this post?")) return;
-
-    try {
-      await axios.delete(
-        `https://epbi-production.up.railway.app/posts/${postId}`
-      );
-      setPosts(posts.filter((post) => post.id !== postId));
-    } catch (error) {
-      console.error("Error deleting post:", error);
-    }
-  };
-
   useEffect(() => {
     const checkSession = async () => {
       try {
         const res = await axios.get(
           "https://epbi-production.up.railway.app/user",
-          {
-            withCredentials: true,
-          }
+          { withCredentials: true }
         );
 
-        if (!res.data.logged_in) {
-          navigate("/");
-        } else {
+        console.log("Session response:", res.data); // Debugging output
+
+        if (res.data?.logged_in) {
           setPostData((prev) => ({ ...prev, user_id: res.data.user.id }));
           fetchPosts();
+        } else {
+          navigate("/");
         }
       } catch (error) {
         console.error("Session check failed:", error);
+        navigate("/"); // Redirect only if there's an error
       }
     };
 
@@ -170,12 +158,6 @@ export default function Dashboard() {
                 <div className="mt-4 flex justify-between text-gray-500 text-sm">
                   <button className="hover:underline">Like</button>
                   <button className="hover:underline">Comment</button>
-                  <button
-                    className="hover:underline"
-                    onClick={() => deletePost(post.id)}
-                  >
-                    Delete
-                  </button>
                 </div>
               </div>
             ))

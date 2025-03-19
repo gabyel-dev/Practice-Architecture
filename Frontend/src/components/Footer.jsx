@@ -4,16 +4,16 @@ export default function Footer() {
       <div className="max-w-4xl mx-auto py-4 flex flex-col items-center">
         {/* Footer Links */}
         <div className="flex space-x-4 mb-2">
-          <a href="#" className="hover:underline">
+          <a href="/about" className="hover:underline">
             About
           </a>
-          <a href="#" className="hover:underline">
+          <a href="/privacy" className="hover:underline">
             Privacy
           </a>
-          <a href="#" className="hover:underline">
+          <a href="/terms_and_condition" className="hover:underline">
             Terms
           </a>
-          <a href="#" className="hover:underline">
+          <a href="/help" className="hover:underline">
             Help
           </a>
         </div>
