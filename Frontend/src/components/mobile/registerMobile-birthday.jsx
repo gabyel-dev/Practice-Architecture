@@ -25,7 +25,7 @@ export default function RegMobileBirthday() {
 
   useEffect(() => {
     axios
-      .get("http://localhost:5000/user", {
+      .get("epbi-production.up.railway.app/user", {
         withCredentials: true,
       })
       .then((res) => res.data)

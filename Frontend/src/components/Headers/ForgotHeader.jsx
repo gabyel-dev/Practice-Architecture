@@ -19,7 +19,7 @@ export default function ForgotHeader() {
   useEffect(() => {
     document.title = "!Facebook - Forgot Password";
     axios
-      .get("http://localhost:5000/user", { withCredentials: true })
+      .get("epbi-production.up.railway.app/user", { withCredentials: true })
       .then((res) => {
         if (res.data.logged_in) navigate(res.data.redirect);
       })
@@ -35,7 +35,7 @@ export default function ForgotHeader() {
     setFadeOut(false);
 
     try {
-      await axios.post("http://localhost:5000/login", loginData, {
+      await axios.post("epbi-production.up.railway.app/login", loginData, {
         withCredentials: true,
         headers: {
           "Content-Type": "application/json",

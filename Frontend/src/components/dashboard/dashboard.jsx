@@ -7,9 +7,10 @@ export default function Dashboard() {
   const navigate = useNavigate();
   const [postData, setPostData] = useState({ user_id: null, content: "" });
   const [posts, setPosts] = useState([]);
-  const [timeUpdate, setTimeUpdate] = useState(0); // For forcing re-renders every minute
+  const [timeUpdate, setTimeUpdate] = useState(0);
 
   const formatTimeAgo = (createdAt) => {
+    if (!createdAt) return "unknown";
     const createdTime = new Date(createdAt);
     const now = new Date();
     const diffInSeconds = Math.floor((now - createdTime) / 1000);
@@ -24,8 +25,8 @@ export default function Dashboard() {
 
   const fetchPosts = async () => {
     try {
-      const res = await axios.get("http://localhost:5000/posts");
-      setPosts(res.data);
+      const res = await axios.get("epbi-production.up.railway.app/posts");
+      setPosts(res.data || []);
     } catch (error) {
       console.error("Error fetching posts:", error);
     }
@@ -33,16 +34,15 @@ export default function Dashboard() {
 
   const handlePost = async (e) => {
     e.preventDefault();
-    if (!postData.user_id || !postData.content) {
+    if (!postData.user_id || !postData.content.trim()) {
       alert("User ID or content is missing!");
       return;
     }
 
     try {
-      await axios.post("http://localhost:5000/post", postData, {
+      await axios.post("epbi-production.up.railway.app/post", postData, {
         headers: { "Content-Type": "application/json" },
       });
-
       setPostData({ user_id: postData.user_id, content: "" });
       fetchPosts();
     } catch (error) {
@@ -54,7 +54,7 @@ export default function Dashboard() {
     if (!window.confirm("Are you sure you want to delete this post?")) return;
 
     try {
-      await axios.delete(`http://localhost:5000/posts/${postId}`);
+      await axios.delete(`epbi-production.up.railway.app/posts/${postId}`);
       setPosts(posts.filter((post) => post.id !== postId));
     } catch (error) {
       console.error("Error deleting post:", error);
@@ -64,7 +64,7 @@ export default function Dashboard() {
   useEffect(() => {
     const checkSession = async () => {
       try {
-        const res = await axios.get("http://localhost:5000/user", {
+        const res = await axios.get("epbi-production.up.railway.app/user", {
           withCredentials: true,
         });
 
@@ -84,16 +84,16 @@ export default function Dashboard() {
 
   useEffect(() => {
     const interval = setInterval(() => {
-      setTimeUpdate((prev) => prev + 1); // Triggers a re-render every 60 seconds
+      setTimeUpdate((prev) => prev + 1);
     }, 60000);
 
-    return () => clearInterval(interval); // Cleanup on unmount
+    return () => clearInterval(interval);
   }, []);
 
   const logout = async () => {
     try {
       await axios.post(
-        "http://localhost:5000/logout",
+        "epbi-production.up.railway.app/logout",
         {},
         { withCredentials: true }
       );
@@ -107,7 +107,6 @@ export default function Dashboard() {
     <>
       <DashboardHeader />
       <div className="max-w-lg mx-auto mt-8 px-4">
-        {/* Post Form */}
         <form
           onSubmit={handlePost}
           className="bg-white shadow-md rounded-lg p-4 mb-4"
@@ -129,7 +128,6 @@ export default function Dashboard() {
           </button>
         </form>
 
-        {/* Display Posts */}
         <div className="space-y-4">
           {posts.length > 0 ? (
             posts.map((post) => (
@@ -137,32 +135,27 @@ export default function Dashboard() {
                 key={post.id}
                 className="bg-white shadow-md rounded-lg p-4 relative"
               >
-                {/* Post Header */}
                 <div className="flex items-center space-x-3">
                   <img
                     src={
                       post.avatar ||
                       "https://upload.wikimedia.org/wikipedia/commons/8/89/Portrait_Placeholder.png"
-                    } // Placeholder avatar
+                    }
                     alt="User Avatar"
                     className="h-10 w-10 rounded-full"
                   />
                   <div>
                     <p className="font-semibold text-md">
-                      {post.username || `User ${post.user_id}`}
+                      {post.first_name || "Unknown"} {post.last_name || "User"}
                     </p>
                     <p className="text-sm text-gray-500">
                       {formatTimeAgo(post.created_at)}
                     </p>
                   </div>
                 </div>
-
-                {/* Post Content */}
                 <p className="mt-3 text-gray-800 font-semibold text-2xl">
                   {post.content}
                 </p>
-
-                {/* Post Actions */}
                 <div className="mt-4 flex justify-between text-gray-500 text-sm">
                   <button className="hover:underline">Like</button>
                   <button className="hover:underline">Comment</button>

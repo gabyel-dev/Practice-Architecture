@@ -25,7 +25,7 @@ export default function RegMobilePassword() {
 
   useEffect(() => {
     axios
-      .get("http://localhost:5000/user", { withCredentials: true })
+      .get("epbi-production.up.railway.app/user", { withCredentials: true })
       .then((res) => res.data)
       .then((data) => {
         if (data.logged_in) {
@@ -63,7 +63,7 @@ export default function RegMobilePassword() {
     if (error) return;
 
     try {
-      await fetch("http://localhost:5000/register", {
+      await fetch("epbi-production.up.railway.app/register", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(formData),

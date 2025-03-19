@@ -52,7 +52,7 @@ export default function ForgotPassword() {
   useEffect(() => {
     document.title = "Facebook - Forgot Password";
     axios
-      .get("http://localhost:5000/user", { withCredentials: true })
+      .get("epbi-production.up.railway.app/user", { withCredentials: true })
       .then((res) => res.data)
       .then((data) => {
         if (data.logged_in) navigate(data.redirect);
@@ -76,7 +76,7 @@ export default function ForgotPassword() {
     setInvalidEmail(false);
     try {
       await axios.post(
-        "http://localhost:5000/forgot_password",
+        "epbi-production.up.railway.app/forgot_password",
         forgotPassData,
         {
           withCredentials: true,

@@ -32,7 +32,7 @@ export default function ForgotPassword() {
 
   useEffect(() => {
     axios
-      .get("http://localhost:5000/user", {
+      .get("epbi-production.up.railway.app/user", {
         withCredentials: true,
       })
       .then((res) => res.data)
@@ -48,7 +48,7 @@ export default function ForgotPassword() {
     setLoading(true);
     setErrorMessage(""); // Clear previous errors
     try {
-      axios.post("http://localhost:5000/forgot_password", loginData, {
+      axios.post("epbi-production.up.railway.app/forgot_password", loginData, {
         headers: {
           "Content-Type": "application/json",
         },

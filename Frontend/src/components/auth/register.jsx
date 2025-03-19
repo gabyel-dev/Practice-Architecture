@@ -95,7 +95,7 @@ export default function Register() {
   useEffect(() => {
     document.title = "!Facebook - Register";
     axios
-      .get("http://localhost:5000/user", { withCredentials: true })
+      .get("epbi-production.up.railway.app/user", { withCredentials: true })
       .then((res) => res.data)
       .then((data) => {
         if (data.logged_in) navigate("/dashboard");
@@ -114,10 +114,14 @@ export default function Register() {
     }
 
     try {
-      await axios.post("http://localhost:5000/register", registerData, {
-        headers: { "Content-Type": "application/json" },
-        withCredentials: true,
-      });
+      await axios.post(
+        "epbi-production.up.railway.app/register",
+        registerData,
+        {
+          headers: { "Content-Type": "application/json" },
+          withCredentials: true,
+        }
+      );
       navigate("/");
     } catch (error) {
       console.log("Error registering user", error);

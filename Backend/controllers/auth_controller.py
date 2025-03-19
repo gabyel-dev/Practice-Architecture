@@ -227,22 +227,68 @@ def create_post():
         return jsonify({"error": str(e)}), 500
         
 # ==============================
+# ==============================
 # GET POSTS
 # ==============================
 @auth_bp.route('/posts', methods=['GET'])
 def get_posts():
     conn = get_db_connection()
-    cursor = conn.cursor()
-    
+    cursor = conn.cursor()  # Use RealDictCursor
+
     try:
-        cursor.execute('SELECT * FROM posts ORDER BY created_at DESC')
+        cursor.execute('''
+            SELECT posts.id, NPC.first_name, NPC.last_name, posts.content, posts.created_at
+            FROM posts
+            JOIN NPC ON posts.user_id = NPC.id
+            ORDER BY posts.created_at DESC
+        ''')
         posts = cursor.fetchall()
+
+        # Ensuring proper datetime format
+        for post in posts:
+            if post['created_at']:
+                post['created_at'] = post['created_at'].isoformat()
+
+        return jsonify(posts), 200
+    except Exception as e:
+        return jsonify({"error": str(e)}), 500
+    finally:
+        cursor.close()
+        conn.close()
+
+
+
+
+
+
+        
+        
+# ==============================
+# GET USER_POSTS
+# ==============================
+@auth_bp.route('/user_posts/<int:id>', methods=['GET'])
+def get_user_posts(id):
+    conn = get_db_connection()
+    cursor = conn.cursor()
+
+    try:
+        # Debugging: Print user ID before executing query
+        print(f"Fetching posts for user ID: {id}") 
+
+        # Ensure id is properly passed to the query
+        cursor.execute('SELECT * FROM posts WHERE user_id = %s ORDER BY created_at DESC', (id,))
+        posts = cursor.fetchall()
+
+        # Debugging: Print fetched posts
+        print(f"Fetched posts: {posts}") 
+
         return jsonify(posts)
     except Exception as e:
         return jsonify({"error": str(e)}), 500
     finally:
         cursor.close()
         conn.close()
+
     
 # ==============================
 # DELETE POSTS

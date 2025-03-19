@@ -26,7 +26,7 @@ export default function DashboardHeader() {
 
     try {
       const res = await axios.get(
-        `http://localhost:5000/search?query=${query}`
+        `epbi-production.up.railway.app/search?query=${query}`
       );
       console.log("Search API Response:", res.data); // Debugging
 

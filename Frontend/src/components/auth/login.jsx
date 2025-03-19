@@ -27,7 +27,7 @@ export default function Login() {
   useEffect(() => {
     document.title = "!Facebook - Login";
     axios
-      .get("http://localhost:5000/user", { withCredentials: true })
+      .get("epbi-production.up.railway.app/user", { withCredentials: true })
       .then((res) => {
         if (res.data.logged_in) navigate(res.data.redirect);
       })
@@ -41,7 +41,7 @@ export default function Login() {
 
     try {
       await axios.post(
-        "http://localhost:5000/login",
+        "epbi-production.up.railway.app/login",
         { ...loginData, password: passwordRef.current.value },
         {
           withCredentials: true,
