@@ -3,6 +3,7 @@ import axios from "axios";
 import { faHouse, faSearch } from "@fortawesome/free-solid-svg-icons";
 import { useState, useEffect, useRef } from "react";
 import { useNavigate } from "react-router-dom";
+import { Link } from "react-router-dom";
 
 export default function DashboardHeader() {
   const [result, setResult] = useState([]);
@@ -68,7 +69,9 @@ export default function DashboardHeader() {
     <div className="relative flex items-center px-5 py-1 justify-between bg-white shadow-sm">
       {/* Search Bar */}
       <div className="flex items-center gap-3 relative" ref={searchRef}>
-        <img src="/_fb_logo.png" alt="logo" className="w-10 h-10" />
+        <Link to={"/dashboard"}>
+          <img src="/_fb_logo.png" alt="logo" className="w-10 h-10" />
+        </Link>
 
         <div className="flex items-center px-3 py-1 rounded-3xl border border-gray-300 bg-gray-100 relative w-60">
           <FontAwesomeIcon icon={faSearch} className="text-gray-400 mr-2" />
@@ -90,7 +93,7 @@ export default function DashboardHeader() {
 
         {/* Search Results Dropdown */}
         {showResults && (
-          <div className="absolute top-full left-0 bg-white border border-gray-300 mt-2 w-60 rounded-lg shadow-md z-10">
+          <div className="absolute top-full left-12 bg-white border border-gray-300 mt-2 w-60 rounded-lg shadow-md z-10">
             {loading ? (
               <div className="p-2 text-gray-500">Loading...</div>
             ) : error ? (
@@ -112,10 +115,15 @@ export default function DashboardHeader() {
         )}
       </div>
 
-      {/* Icons Section */}
       <div className="flex gap-4">
-        <div className="w-12 h-12 flex items-center justify-center border-2 rounded-full">
-          <FontAwesomeIcon icon={faHouse} size="xl" className="text-gray-300" />
+        <div className="w-12 h-12 flex items-center justify-center border-1 border-gray-300 rounded-full">
+          <Link to={"/dashboard"}>
+            <FontAwesomeIcon
+              icon={faHouse}
+              size="xl"
+              className="text-gray-300 active:scale-70 hover:text-gray-200 transition-all"
+            />
+          </Link>
         </div>
       </div>
 

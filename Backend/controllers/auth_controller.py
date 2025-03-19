@@ -110,7 +110,7 @@ def forgot_password():
     try:
         cursor.execute('SELECT password FROM NPC WHERE email = %s', (email,))
         user = cursor.fetchone()
-        if not user or not check_password(user[0], password):
+        if not user or not check_password(user['password'], password):
             return jsonify({'error': 'Invalid email or password'}), 401
 
         hashed_password = hash_password(new_password)
@@ -195,6 +195,79 @@ def get_user(user_id):
         print("User fetch error:", e)  # Debugging
         return jsonify({"error": str(e)}), 500
 
+    finally:
+        cursor.close()
+        conn.close()
+
+
+# ==============================
+# CREATE POSTS
+# ==============================
+@auth_bp.route('/post', methods=['POST'])
+def create_post():
+    data = request.json
+    user_id = data.get("user_id")
+    content = data.get("content")
+    
+    conn = get_db_connection()
+    cursor = conn.cursor()
+
+    if not user_id or not content:
+        return jsonify({"error": "user_id and content are required"}), 400
+
+    try:
+        cursor.execute(
+            "INSERT INTO posts (user_id, content) VALUES (%s, %s) RETURNING id, user_id, content, created_at",
+            (user_id, content),
+        )
+        new_post = cursor.fetchone()
+        conn.commit()
+        return jsonify({"message": "Post created successfully", "post": new_post}), 201
+    except Exception as e:
+        return jsonify({"error": str(e)}), 500
+        
+# ==============================
+# GET POSTS
+# ==============================
+@auth_bp.route('/posts', methods=['GET'])
+def get_posts():
+    conn = get_db_connection()
+    cursor = conn.cursor()
+    
+    try:
+        cursor.execute('SELECT * FROM posts ORDER BY created_at DESC')
+        posts = cursor.fetchall()
+        return jsonify(posts)
+    except Exception as e:
+        return jsonify({"error": str(e)}), 500
+    finally:
+        cursor.close()
+        conn.close()
+    
+# ==============================
+# DELETE POSTS
+# ==============================
+@auth_bp.route('/posts/<int:post_id>', methods=['DELETE'])
+def del_post(post_id):
+    try:
+        conn = get_db_connection()
+        cursor = conn.cursor()
+
+        # Check if post exists
+        cursor.execute("SELECT * FROM posts WHERE id = %s", (post_id,))
+        post = cursor.fetchone()
+
+        if not post:
+            return jsonify({"error": "Post not found"}), 404
+
+        # Delete the post
+        cursor.execute("DELETE FROM posts WHERE id = %s", (post_id,))
+        conn.commit()
+
+        return jsonify({"message": "Post deleted successfully", "post_id": post_id}), 200
+    except Exception as e:
+        print(f"Error deleting post {post_id}: {str(e)}")  # Debugging log
+        return jsonify({"error": "An error occurred while deleting the post"}), 500
     finally:
         cursor.close()
         conn.close()

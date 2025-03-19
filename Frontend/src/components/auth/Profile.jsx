@@ -1,6 +1,7 @@
 import { useParams } from "react-router-dom";
 import { useEffect, useState } from "react";
 import axios from "axios";
+import DashboardHeader from "../Headers/DashboardHeader";
 
 export default function Profile() {
   const { id } = useParams(); // Ensure this matches the route
@@ -29,11 +30,14 @@ export default function Profile() {
   if (!user) return <p>Loading...</p>;
 
   return (
-    <div className="p-4">
-      <h1 className="text-2xl font-bold">
-        {user.first_name} {user.last_name}
-      </h1>
-      <p>Email: {user.email}</p>
-    </div>
+    <>
+      <DashboardHeader />
+      <div className="p-4">
+        <h1 className="text-2xl font-bold">
+          {user.first_name} {user.last_name}
+        </h1>
+        <p>Email: {user.email}</p>
+      </div>
+    </>
   );
 }
