@@ -2,13 +2,25 @@ import { useEffect, useState } from "react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import DashboardHeader from "../Headers/DashboardHeader";
-import moment from "moment"; // For time formatting
 
 export default function Dashboard() {
   const navigate = useNavigate();
-
   const [postData, setPostData] = useState({ user_id: null, content: "" });
   const [posts, setPosts] = useState([]);
+  const [timeUpdate, setTimeUpdate] = useState(0); // For forcing re-renders every minute
+
+  const formatTimeAgo = (createdAt) => {
+    const createdTime = new Date(createdAt);
+    const now = new Date();
+    const diffInSeconds = Math.floor((now - createdTime) / 1000);
+
+    if (diffInSeconds < 60) return "just now";
+    if (diffInSeconds < 3600)
+      return `${Math.floor(diffInSeconds / 60)} min ago`;
+    if (diffInSeconds < 86400)
+      return `${Math.floor(diffInSeconds / 3600)} hrs ago`;
+    return `${Math.floor(diffInSeconds / 86400)} days ago`;
+  };
 
   const fetchPosts = async () => {
     try {
@@ -70,6 +82,14 @@ export default function Dashboard() {
     checkSession();
   }, [navigate]);
 
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setTimeUpdate((prev) => prev + 1); // Triggers a re-render every 60 seconds
+    }, 60000);
+
+    return () => clearInterval(interval); // Cleanup on unmount
+  }, []);
+
   const logout = async () => {
     try {
       await axios.post(
@@ -86,7 +106,7 @@ export default function Dashboard() {
   return (
     <>
       <DashboardHeader />
-      <div className="max-w-lg mx-auto mt-8">
+      <div className="max-w-lg mx-auto mt-8 px-4">
         {/* Post Form */}
         <form
           onSubmit={handlePost}
@@ -120,22 +140,27 @@ export default function Dashboard() {
                 {/* Post Header */}
                 <div className="flex items-center space-x-3">
                   <img
-                    src={post.avatar || "https://via.placeholder.com/40"} // Placeholder avatar
+                    src={
+                      post.avatar ||
+                      "https://upload.wikimedia.org/wikipedia/commons/8/89/Portrait_Placeholder.png"
+                    } // Placeholder avatar
                     alt="User Avatar"
                     className="h-10 w-10 rounded-full"
                   />
                   <div>
-                    <p className="font-semibold">
+                    <p className="font-semibold text-md">
                       {post.username || `User ${post.user_id}`}
                     </p>
                     <p className="text-sm text-gray-500">
-                      {moment.utc(post.created_at).local().fromNow()}
+                      {formatTimeAgo(post.created_at)}
                     </p>
                   </div>
                 </div>
 
                 {/* Post Content */}
-                <p className="mt-3 text-gray-800">{post.content}</p>
+                <p className="mt-3 text-gray-800 font-semibold text-2xl">
+                  {post.content}
+                </p>
 
                 {/* Post Actions */}
                 <div className="mt-4 flex justify-between text-gray-500 text-sm">

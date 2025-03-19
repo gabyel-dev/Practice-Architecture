@@ -272,3 +272,4 @@ def del_post(post_id):
         cursor.close()
         conn.close()
 
+
