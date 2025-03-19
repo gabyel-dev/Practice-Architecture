@@ -49,8 +49,15 @@ export default function Profile() {
           "https://epbi-production.up.railway.app/user",
           { withCredentials: true }
         );
-        console.log("Logged-in user:", res.data); // Debugging
-        setLoggedInUser(res.data);
+
+        if (!res.data.logged_in) {
+          console.log("User not logged in.");
+          setLoggedInUser(null);
+          return;
+        }
+
+        console.log("Logged-in user:", res.data.user);
+        setLoggedInUser(res.data.user);
       } catch (error) {
         console.error("Error fetching logged-in user:", error);
       }
