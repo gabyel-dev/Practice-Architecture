@@ -49,6 +49,7 @@ export default function Profile() {
           "https://epbi-production.up.railway.app/user",
           { withCredentials: true }
         );
+        console.log("Logged-in user:", res.data); // Debugging
         setLoggedInUser(res.data);
       } catch (error) {
         console.error("Error fetching logged-in user:", error);
@@ -61,6 +62,7 @@ export default function Profile() {
         const res = await axios.get(
           `https://epbi-production.up.railway.app/user/${id}`
         );
+        console.log("Fetched profile user:", res.data); // Debugging
         setUser(res.data);
         setError(null);
       } catch (error) {
@@ -75,6 +77,7 @@ export default function Profile() {
         const res = await axios.get(
           `https://epbi-production.up.railway.app/user_posts/${id}`
         );
+        console.log("Fetched posts:", res.data); // Debugging
         setPosts(res.data);
         setPostError(null);
       } catch (error) {
@@ -158,17 +161,25 @@ export default function Profile() {
                   {post.content}
                 </p>
 
+                {/* Debugging Information */}
+                <p className="text-gray-500 text-xs mt-2">
+                  Post User ID: {post.user_id} | Logged-in User ID:{" "}
+                  {loggedInUser?.id}
+                </p>
+
                 {/* Post Actions (Only allow delete if logged-in user is the owner) */}
                 <div className="mt-3 flex justify-between text-gray-500 text-xs sm:text-sm">
                   <button className="hover:underline">Like</button>
                   <button className="hover:underline">Comment</button>
-                  {loggedInUser?.id === post.user_id && (
+                  {loggedInUser?.id === post.user_id ? (
                     <button
                       className="hover:underline text-red-500"
                       onClick={() => deletePost(post.id)}
                     >
                       Delete
                     </button>
+                  ) : (
+                    <p className="text-gray-500">Not authorized</p>
                   )}
                 </div>
               </div>
