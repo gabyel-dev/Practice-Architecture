@@ -164,14 +164,8 @@ export default function Profile() {
                 </div>
 
                 {/* Post Content */}
-                <p className="mt-2 text-gray-800 text-sm sm:text-base font-semibold">
+                <p className="mt-2 text-gray-800 text-sm sm:text-base font-semibold break-words">
                   {post.content}
-                </p>
-
-                {/* Debugging Information */}
-                <p className="text-gray-500 text-xs mt-2">
-                  Post User ID: {post.user_id} | Logged-in User ID:{" "}
-                  {loggedInUser?.id}
                 </p>
 
                 {/* Post Actions (Only allow delete if logged-in user is the owner) */}

@@ -152,9 +152,10 @@ export default function Dashboard() {
                     </p>
                   </div>
                 </div>
-                <p className="mt-3 text-gray-800 font-semibold text-2xl">
+                <p className="mt-3 text-gray-800 font-semibold text-2xl break-words">
                   {post.content}
                 </p>
+
                 <div className="mt-4 flex justify-between text-gray-500 text-sm">
                   <button className="hover:underline">Like</button>
                   <button className="hover:underline">Comment</button>

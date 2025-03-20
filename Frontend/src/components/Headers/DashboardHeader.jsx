@@ -13,6 +13,27 @@ export default function DashboardHeader() {
   const [error, setError] = useState("");
   const searchRef = useRef(null);
   const navigate = useNavigate();
+  const [userId, setUserId] = useState(null);
+
+  useEffect(() => {
+    const fetchUserId = async () => {
+      try {
+        const res = await axios.get(
+          "https://epbi-production.up.railway.app/user",
+          { withCredentials: true }
+        );
+        console.log("User API Response:", res.data); // Debugging
+        if (res.data.user && res.data.user.id) {
+          setUserId(res.data.user.id);
+          console.log("User ID set to:", res.data.user.id);
+        }
+      } catch (error) {
+        console.error("Error fetching user ID:", error);
+      }
+    };
+
+    fetchUserId();
+  }, []);
 
   const handleSearch = async () => {
     if (!query.trim()) {
@@ -130,11 +151,21 @@ export default function DashboardHeader() {
       {/* Profile Icon */}
       <div>
         <div className="w-10 h-10 flex justify-center items-center border border-gray-300 rounded-full overflow-hidden">
-          <img
-            src="/profile_icon.png"
-            alt="Profile Icon"
-            className="w-full h-full object-cover"
-          />
+          <button
+            onClick={() => {
+              if (userId) {
+                navigate(`/profile/${userId}`);
+              } else {
+                console.warn("User ID not available yet");
+              }
+            }}
+          >
+            <img
+              src="/profile_icon.png"
+              alt="Profile Icon"
+              className="w-full h-full object-cover"
+            />
+          </button>
         </div>
       </div>
     </div>
