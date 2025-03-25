@@ -164,7 +164,7 @@ export default function Profile() {
                 </div>
 
                 {/* Post Content */}
-                <p className="mt-2 text-gray-800 text-sm sm:text-base font-semibold break-words">
+                <p className="mt-2 text-gray-800 text-sm sm:text-base font-semibold break-words ">
                   {post.content}
                 </p>
 
@@ -191,5 +191,6 @@ export default function Profile() {
         </div>
       </div>
     </>
+    //hatdog
   );
 }
